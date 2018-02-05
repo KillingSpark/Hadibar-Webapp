@@ -56,6 +56,8 @@ var bevapp = new Vue({
           res = JSON.parse(response)
           if (res.status == "OK") {
             app.current_account.Value = res.response.Value
+          }else{
+            alert(res.response + "\nmaybe you need to login?")
           }
         }
       })
