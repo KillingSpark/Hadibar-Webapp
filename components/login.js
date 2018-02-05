@@ -27,7 +27,7 @@ Vue.component('login-form', {
         send_login: function () {
             var comp = this
             $.ajax({
-                url: "/session/login",
+                url: "/api/session/login",
                 type: "POST",
                 data: { name: comp.name, password: comp.password },
                 beforeSend: function (xhr) {
@@ -45,7 +45,7 @@ Vue.component('login-form', {
         send_logout: function () {
             var comp = this
             $.ajax({
-                url: "/session/logout",
+                url: "/api/session/logout",
                 type: "POST",
                 data: {},
                 beforeSend: function (xhr) {

@@ -46,7 +46,7 @@ var bevapp = new Vue({
     changeAccount: function (diff) {
       var app = this
       $.ajax({
-        url: "/account/update/" + app.current_account.ID,
+        url: "/api/f/m6/account/update/?id=" + app.current_account.ID,
         type: 'POST',
         data: { value: diff },
         beforeSend: function (xhr) {
@@ -63,7 +63,7 @@ var bevapp = new Vue({
     updateAccounts: function () {
       var app = this
       $.ajax({
-        url: "/account/all",
+        url: "/api/f/m6/account/all",
         type: 'GET',
         data: {},
         beforeSend: function (xhr) {
@@ -81,7 +81,7 @@ var bevapp = new Vue({
     updateBeverages: function () {
       var app = this
       $.ajax({
-        url: "/beverage/all",
+        url: "/api/f/m6/beverage/all",
         type: 'GET',
         data: {},
         beforeSend: function (xhr) {
@@ -102,8 +102,10 @@ var bevapp = new Vue({
   created: function () {
     var app = this
     //getting an initial sessionID for the API
-    $.get("/session", {}, function (data, textStatus, response) {
-      app.sessionid = response.getResponseHeader('sessionID')
+    $.get("/api/session/getid", {}, function (data, textStatus, response) {
+      console.log(data)
+      app.sessionid = data
+      
       app.updateAccounts()
       app.updateBeverages()
     })

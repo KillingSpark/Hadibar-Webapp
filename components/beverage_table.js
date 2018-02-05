@@ -47,7 +47,7 @@ Vue.component('bev-table', {
     deleteBeverage: function (index) {
       var comp = this
       $.ajax({
-        url: "/beverage/delete/" + comp.beverages[index].ID,
+        url: "/api/f/m6/beverage/delete/?id="+ comp.beverages[index].ID,
         type: 'DELETE',
         data: {},
         beforeSend: function (xhr) {
@@ -64,7 +64,7 @@ Vue.component('bev-table', {
     addBeverage: function () {
       var comp = this
       $.ajax({
-        url: "/beverage/new",
+        url: "/api/f/m6/beverage/new",
         type: 'PUT',
         data: { name: this.bev_name, value: this.bev_value },
         beforeSend: function (xhr) {
