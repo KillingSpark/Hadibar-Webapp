@@ -46,7 +46,7 @@ var bevapp = new Vue({
     changeAccount: function (diff) {
       var app = this
       $.ajax({
-        url: "/api/f/m6/account/update/?id=" + app.current_account.ID,
+        url: "/api/f/m6/account/update?id=" + app.current_account.ID,
         type: 'POST',
         data: { value: diff },
         beforeSend: function (xhr) {

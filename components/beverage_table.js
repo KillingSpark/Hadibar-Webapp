@@ -47,7 +47,7 @@ Vue.component('bev-table', {
     deleteBeverage: function (index) {
       var comp = this
       $.ajax({
-        url: "/api/f/m6/beverage/delete/?id="+ comp.beverages[index].ID,
+        url: "/api/f/m6/beverage/delete?id="+ comp.beverages[index].ID,
         type: 'DELETE',
         data: {},
         beforeSend: function (xhr) {

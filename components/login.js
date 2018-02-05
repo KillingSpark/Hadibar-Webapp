@@ -34,7 +34,7 @@ Vue.component('login-form', {
                     xhr.setRequestHeader("sessionID", comp.sessionid)
                 },
                 success: function(response){
-                    if(response === "OK"){
+                    if(JSON.parse(response).status === "OK"){
                         comp.show_login = false
                     }else{
                         alert("Login failed")
@@ -52,7 +52,7 @@ Vue.component('login-form', {
                     xhr.setRequestHeader("sessionID", comp.sessionid)
                 },
                 success: function(response){
-                    if(response === "OK"){
+                    if(JSON.parse(response).status === "OK"){
                         comp.show_login = true
                     }else{
                         alert("Logout failed")
