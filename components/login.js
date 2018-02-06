@@ -36,6 +36,8 @@ Vue.component('login-form', {
                 success: function(response){
                     if(JSON.parse(response).status === "OK"){
                         comp.show_login = false
+                        bevapp.updateAccounts()
+                        bevapp.updateBeverages()
                     }else{
                         alert("Login failed")
                     }
@@ -54,6 +56,8 @@ Vue.component('login-form', {
                 success: function(response){
                     if(JSON.parse(response).status === "OK"){
                         comp.show_login = true
+                        bevapp.updateAccounts()
+                        bevapp.updateBeverages()
                     }else{
                         alert("Logout failed")
                     }

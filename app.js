@@ -75,8 +75,11 @@ var bevapp = new Vue({
           res = JSON.parse(response)
           if (res.status == "OK") {
             app.accounts = res.response
+            app.current_account = app.accounts[0]
+          }else{
+            app.accounts = []
+            app.current_account.Value = 0
           }
-          app.current_account = app.accounts[0]
         }
       })
     },
@@ -96,6 +99,8 @@ var bevapp = new Vue({
             app.beverages.forEach(function(element) {
               element.times = 0
             }, this);
+          }else{
+            app.beverages = []
           }
         }
       })
@@ -105,11 +110,7 @@ var bevapp = new Vue({
     var app = this
     //getting an initial sessionID for the API
     $.get("/api/session/getid", {}, function (data, textStatus, response) {
-      console.log(data)
       app.sessionid = data
-      
-      app.updateAccounts()
-      app.updateBeverages()
     })
   }
 })
