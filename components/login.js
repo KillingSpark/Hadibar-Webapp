@@ -14,7 +14,7 @@ Vue.component('login-form', {
             <div v-if="show_login">
                 <span id="logintext">Log your ass in!</span>
                 <input type=text v-model="name" placeholder="Name"/>
-                <input type=text v-model="password" placeholder="Passwort"/>
+                <input type=password v-model="password" placeholder="Passwort"/>
                 <button class="login_button" v-on:click="send_login">LOGIN</button>
             </div>
             <div v-if="!show_login">
