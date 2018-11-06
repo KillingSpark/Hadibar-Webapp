@@ -4,6 +4,20 @@ div.tab {
     background-color: #f1f1f1;
 }
 
+#matrix {
+    width: 100%;
+}
+
+#matrix td, th {
+    height: 40px;
+    border-style: solid;
+    border-color: #000000
+}
+
+#accreport {
+    width: 40%;
+}
+
 .login_button{
     border-radius: 10px;
     background-color: inherit;
@@ -37,7 +51,7 @@ input{
 }
 body { 
     padding-bottom: 70px;
-    background-color: beige;
+    background-color: white;
 }
 
 .content {

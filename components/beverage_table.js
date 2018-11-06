@@ -71,7 +71,6 @@ Vue.component('bev-table', {
         function (response) {
           response.times = 0
           comp.beverages.push(response)
-          alert(response.Name)
         }, displayError)
     },
     updateBeverages: function () {

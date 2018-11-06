@@ -63,6 +63,10 @@ Vue.component('acc-info-table', {
         <br>
         <input type="text" v-model="newname" placeholder="Name for the new account"/>
         <button v-on:click=call_add>Add</button>
+        <br>
+        <br>
+        <h1>Generate all the reports</h1>
+        <reports></reports>
       </div>
     </div>
   `,
