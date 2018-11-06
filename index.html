@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="app.css">
     <script src="vue.js"></script>
     <script src="jquery.js"></script>
+
+    <script SRC="hadibarlib/lib.js"></script>
+    <script SRC="hadibarlib/accountCalls.js"></script>
+    <script SRC="hadibarlib/beverageCalls.js"></script>
+    <script SRC="hadibarlib/sessionCalls.js"></script>
+
     <script src="components/account_table.js"></script>
     <script src="components/beverage_table.js"></script>
     <script src="components/login.js"></script>
@@ -14,20 +20,20 @@
 </head>
 
 <body>
-    <div id="bev-table" class="container-fluid tabcontent">
-        <div class="tab row">
-            <button class="col-md-6 tablink  active" v-on:click="openApp($event, 'bev-table')">Beverages</button>
-            <button class="col-md-6 tablink" v-on:click="openApp($event, 'direct-payment')">Direct</button>
-        </div>
-        <div class="content">
-            <acc-info-table v-bind:accs="accounts" v-bind:selected="acc_selected" v-bind:show_payment="show_payment" v-bind:account="current_account"></acc-info-table>
-            <br>
-            <br>
-            <bev-table v-bind:sessionid="sessionid" v-if="show_table" v-bind:beverages="beverages" v-bind:exec="make_payment"></bev-table>
-        </div>
-        <login-form v-bind:sessionid="sessionid"></login-form>
+    <div id="app" v-on:update-accounts="updateAccounts" class="container-fluid tabcontent">
+            <div class="tab row">
+                    <button class="col-md-6 tablink  active" v-on:click="openApp($event, 'bev-table')">Beverages</button>
+                    <button class="col-md-6 tablink" v-on:click="openApp($event, 'direct-payment')">Direct</button>
+                </div>
+                <div class="content">
+                    <acc-info-table v-bind:accs="accounts" v-bind:show_payment="show_payment" v-bind:account="current_account"></acc-info-table>
+                    <br>
+                    <br>
+                    <bev-table v-if="show_table" v-bind:current_account="current_account"></bev-table>
+                </div>
+                <login-form></login-form>
+          </div>
     </div>
-
     <script src="app.js"></script>
 </body>
 

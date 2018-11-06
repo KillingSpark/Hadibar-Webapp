@@ -1,33 +1,15 @@
 /// <reference path="node_modules/@types/jquery/index.d.ts" />
 
 var bevapp = new Vue({
-  el: '#bev-table',
+  el: '#app',
   data: {
-    sessionid: "Huhu",
-    current_account: {
-      Owner: {
-        Name: "---",
-      }, Value: 0
-    },
     show_table: true,
     show_payment: false,
-    beverages: [],
-    accounts: []
-  },
-  computed: {
-    bev_table: function (e) {
-      return
-    }
+    accounts: [],
+    current_account: {}
   },
   methods: {
-    acc_selected: function (account) { this.current_account = account },
-    make_payment: function (event) {
-      var sum = 0
-      for (var i = 0; i < this.beverages.length; i++) {
-        sum += this.beverages[i].times * this.beverages[i].Value
-      }
-      this.changeAccount(-sum)
-    },
+    selectNewAcc: function (index) { this.current_account = this.accounts[index]},
     openApp: function (event, app_name) {
       var tabs = document.getElementsByClassName('tablink')
       for (var i = 0; i < tabs.length; i++) {
@@ -43,76 +25,18 @@ var bevapp = new Vue({
         this.show_payment = true
       }
     },
-    changeAccount: function (diff) {
-      var app = this
-      $.ajax({
-        url: "/api/f/account/update?id=" + app.current_account.ID,
-        type: 'POST',
-        data: { value: diff },
-        beforeSend: function (xhr) {
-          xhr.setRequestHeader("sessionID", app.sessionid)
-        },
-        success: function (response) {
-          res = JSON.parse(response)
-          if (res.status == "OK") {
-            app.current_account.Value = res.response.Value
-          }else{
-            alert(res.response + "\nmaybe you need to login?")
-          }
-        }
-      })
-    },
     updateAccounts: function () {
       var app = this
-      $.ajax({
-        url: "/api/f/account/all",
-        type: 'GET',
-        data: {},
-        beforeSend: function (xhr) {
-          xhr.setRequestHeader("sessionID", app.sessionid)
-        },
-        success: function (response) {
-          res = JSON.parse(response)
-          if (res.status == "OK") {
-            app.accounts = res.response
-            app.current_account = app.accounts[0]
-          }else{
-            app.accounts = []
-            app.current_account.Value = 0
-          }
-        }
-      })
-    },
-    updateBeverages: function () {
-      var app = this
-      $.ajax({
-        url: "/api/f/beverage/all",
-        type: 'GET',
-        data: {},
-        beforeSend: function (xhr) {
-          xhr.setRequestHeader("sessionID", app.sessionid)
-        },
-        success: function (response) {
-          res = JSON.parse(response)
-          if (res.status == "OK") {
-            app.beverages = res.response
-            app.beverages.forEach(function(element) {
-              element.times = 0
-            }, this);
-          }else{
-            app.beverages = []
-          }
-        }
-      })
-    },
+      getAccounts(function (response) {
+        app.accounts = response
+        app.current_account = app.accounts[0]
+      }, displayError)
+    }
   },
-  created: function () {
-    var app = this
-    //getting an initial sessionID for the API
-    $.get("/api/session/getid", {}, function (data, textStatus, response) {
-      app.sessionid = data
-    })
-  }
+created: function () {
+  getSessionIDAndThen(function(){})
+  loginHooks.push(this.updateAccounts)
+}
 })
 
 

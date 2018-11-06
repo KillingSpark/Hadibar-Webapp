@@ -1,23 +1,29 @@
 /// <reference path="../node_modules/@types/jquery/index.d.ts" />
 
 Vue.component('acc-option', {
-  props: ['account', 'selected'],
-  template: `<option v-on:click="selected(account)"> {{account.Owner.Name}} </option>`
+  props: ['name', 'index'],
+  template: `<option v-on:click="select_account(index)"> {{name}} </option>`,
+  methods:{
+    select_account: function(){
+      bevapp.selectNewAcc(this.index)
+    }
+  }
 })
 
 Vue.component('acc-select', {
-  props: ['accs', 'selected'],
+  props: ['accs'],
   template: `
     <select style="width: 100%">
-      <acc-option v-bind:selected="selected" v-for="acc in accs" v-bind:key="acc" v-bind:account="acc" />
+      <acc-option v-for="(acc, index) in accs" v-bind:key="acc" v-bind:name="acc.Owner.Name" v-bind:index="index" />
     </select>
-    `,
+    `
 })
 
 Vue.component('acc-info-table', {
   data: function () {
     return {
-      difference: 0
+      difference: 0,
+      newname: ""
     }
   },
   computed: {
@@ -25,7 +31,7 @@ Vue.component('acc-info-table', {
       return Number(this.account.Value) < 0
     }
   },
-  props: ['account', 'show_payment', 'accs', 'selected'],
+  props: ['account', 'show_payment', 'accs'],
   template: `
   <div>
     <div class="row">
@@ -38,22 +44,46 @@ Vue.component('acc-info-table', {
           </thead>
           <tbody>
               <tr>
-                  <td><acc-select v-bind:accs="accs" v-bind:selected="selected"></acc-select></td>
+                  <td><acc-select v-bind:accs="accs"></acc-select></td>
                   <td v-bind:class="{danger: isNegativ, success: !isNegativ}">{{account.Value}}</td>
               </tr>
           </tbody>
       </table>
-      </div>
+    </div>
+      <button v-if="show_payment" v-on:click=call_delete>Delete Account</button>
+      
       <br><br>
       <div v-if="show_payment" class="row">
-        <input type="text" v-model="difference" />
-        <button v-on:click="make_payment">Execute</button>
+        <hr>
+        <h1>Change value of the account</h1>
+        <input type="text" v-model="difference" placeholder="Difference to add to the account"/>
+        <button v-on:click=make_payment>Execute</button>
+        <hr>
+        <h1>Add new account</h1>
+        <br>
+        <input type="text" v-model="newname" placeholder="Name for the new account"/>
+        <button v-on:click=call_add>Add</button>
       </div>
     </div>
   `,
   methods: {
     make_payment: function () {
-      this.account.Value = Number(this.account.Value) + Number(this.difference)
+      diff = Number(this.difference)
+      updateAccount(this.account.ID, diff, this.account.Owner.Name, function(newacc){
+        bevapp.updateAccounts()
+      }, displayError)
+    },
+    call_add: function() {
+      comp = this
+      newAccount(0, this.newname, function(newacc){
+        bevapp.updateAccounts()
+      }, displayError)
+    },
+    call_delete: function() {
+      comp = this
+      deleteAccount(this.account.ID, function(){
+        bevapp.updateAccounts()
+      }, displayError)
     }
   }
 })

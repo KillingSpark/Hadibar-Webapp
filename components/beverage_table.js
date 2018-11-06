@@ -3,13 +3,14 @@
 Vue.component('bev-table', {
   data: function () {
     return {
+      beverages: [],
       bev_value: 0,
       bev_name: ""
     }
   },
-  props: ['beverages', 'exec', 'sessionid'],
+  props: ["current_account"],
   template:
-  ` <div>
+    ` <div>
       <div class="row">
         <table id="bev_table" class="table-bordered table-hover col-md-3">
             <thead>
@@ -25,7 +26,7 @@ Vue.component('bev-table', {
                     <td>{{bev.Name}}</td>
                     <td class="center">{{bev.Value}}</td>
                     <td><input v-model="beverages[index].times" type="text" style="width: 100%" /></td>
-                    <td class="danger center" v-on:click="deleteBeverage(index)">X</td>
+                    <td class="danger center" v-on:click="call_delete(index)">X</td>
                 </tr>
             </tbody>
         </table>
@@ -35,49 +36,55 @@ Vue.component('bev-table', {
             <input type="text" v-model="bev_name" placeholder="new name" />
             <input type="text" v-model="bev_value" placeholder="new value" />
             <br>
-            <button style="margin-top: 1%;" class="col-md-2" v-on:click="addBeverage">Add</button>
+            <button style="margin-top: 1%;" class="col-md-2" v-on:click="call_add">Add</button>
           </div>
       </div>
       <div class="row">
-        <button v-on:click="exec">Execute</button>
+        <button v-on:click="updateSelectedAccountWithSelectedBeverages">Execute</button>
       </div>
     </div>
     `,
   methods: {
-    deleteBeverage: function (index) {
-      var comp = this
-      $.ajax({
-        url: "/api/f/beverage/delete?id="+ comp.beverages[index].ID,
-        type: 'DELETE',
-        data: {},
-        beforeSend: function (xhr) {
-          xhr.setRequestHeader("sessionID", comp.sessionid)
-        },
-        success: function (response) {
-          res = JSON.parse(response)
-          if (res.status == "OK") {
-            comp.beverages.splice(index, 1)
-          }
-        }
-      });
+    sum_selected_beverages: function (event) {
+      var sum = 0
+      for (var i = 0; i < this.beverages.length; i++) {
+        sum += this.beverages[i].times * this.beverages[i].Value
+      }
+      return -sum
     },
-    addBeverage: function () {
+    updateSelectedAccountWithSelectedBeverages: function () {
+      comp = this
+      updateAccount(this.current_account.ID, this.sum_selected_beverages(), this.current_account.Name, function (acc) {
+        comp.current_account.Value = acc.Value
+      }, displayError())
+    },
+    call_delete: function (index) {
       var comp = this
-      $.ajax({
-        url: "/api/f/beverage/new",
-        type: 'PUT',
-        data: { name: this.bev_name, value: this.bev_value },
-        beforeSend: function (xhr) {
-          xhr.setRequestHeader("sessionID", comp.sessionid)
-        },
-        success: function (response) {
-          res = JSON.parse(response)
-          if (res.status == "OK") {
-            res.response.times = 0
-            comp.beverages.push(res.response)
-          }
-        }
-      });
-    }
+      deleteBeverage(comp.beverages[index].ID,
+        function (response) {
+          comp.beverages.splice(index, 1)
+        }, displayError)
+    },
+    call_add: function () {
+      var comp = this
+      newBeverage(this.bev_value, this.bev_name,
+        function (response) {
+          response.times = 0
+          comp.beverages.push(response)
+          alert(response.Name)
+        }, displayError)
+    },
+    updateBeverages: function () {
+      var comp = this
+      getBeverages(function (response) {
+        comp.beverages = response
+        comp.beverages.forEach(function (element) {
+          element.times = 0
+        }, this);
+      }, displayError)
+    },
+  },
+  created: function () {
+    loginHooks.push(this.updateBeverages)
   }
 })

@@ -8,60 +8,37 @@ Vue.component('login-form', {
             show_login: true
         }
     },
-    props: ['sessionid'],
     template: `
         <div class="navbar navbar-fixed-bottom">
             <div v-if="show_login">
                 <span id="logintext">Log your ass in!</span>
                 <input type=text v-model="name" placeholder="Name"/>
                 <input type=password v-model="password" placeholder="Passwort"/>
-                <button class="login_button" v-on:click="send_login">LOGIN</button>
+                <button class="login_button" v-on:click="call_login">LOGIN</button>
             </div>
             <div v-if="!show_login">
                 <span id="logintext">Log your ass out!</span>
-                <button class="login_button" v-on:click="send_logout">LOGOUT</button>
+                <button class="login_button" v-on:click="call_logout">LOGOUT</button>
             </div>
         </div>
     `,
-    methods: {
-        send_login: function () {
-            var comp = this
-            $.ajax({
-                url: "/api/session/login",
-                type: "POST",
-                data: { name: comp.name, password: comp.password },
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader("sessionID", comp.sessionid)
-                },
-                success: function(response){
-                    if(JSON.parse(response).status === "OK"){
-                        comp.show_login = false
-                        bevapp.updateAccounts()
-                        bevapp.updateBeverages()
-                    }else{
-                        alert("Login failed")
-                    }
-                }
+    methods:{
+        call_login: function(){
+            that = this
+            doLogin(this.name, this.password, function(res){
+                that.show_login = false
+            },
+            function(msg){
+                alert(msg)
             })
         },
-        send_logout: function () {
-            var comp = this
-            $.ajax({
-                url: "/api/session/logout",
-                type: "POST",
-                data: {},
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader("sessionID", comp.sessionid)
-                },
-                success: function(response){
-                    if(JSON.parse(response).status === "OK"){
-                        comp.show_login = true
-                        bevapp.updateAccounts()
-                        bevapp.updateBeverages()
-                    }else{
-                        alert("Logout failed")
-                    }
-                }
+        call_logout: function(){
+            that = this
+            doLogout(function(res){
+                that.show_login = true
+            },
+            function(msg){
+                alert(msg)
             })
         }
     }
