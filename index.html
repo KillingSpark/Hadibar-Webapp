@@ -28,10 +28,10 @@
                     <button class="col-md-6 tablink" v-on:click="openApp($event, 'direct-payment')">Direct</button>
                 </div>
                 <div class="content">
-                    <acc-info-table v-bind:accs="accounts" v-bind:show_payment="show_payment" v-bind:account="current_account"></acc-info-table>
+                    <acc-info-table v-bind:selected_cb=selectNewAcc v-bind:accs="accounts" v-bind:show_payment="show_payment" v-bind:account="current_account"></acc-info-table>
                     <br>
                     <br>
-                    <bev-table v-if="show_table" v-bind:current_account="current_account"></bev-table>
+                    <bev-table v-show="show_table" v-bind:accs="accounts" v-bind:current_account="current_account"></bev-table>
                 </div>
                 <login-form></login-form>
           </div>

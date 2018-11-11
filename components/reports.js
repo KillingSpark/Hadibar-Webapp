@@ -18,7 +18,6 @@ Vue.component('reports',
     <br>
     <br>
     <div style="width:100%" v-html=bevReportHtml></div>
-    
     </div>`,
         methods: {
             call_account_report: function () {

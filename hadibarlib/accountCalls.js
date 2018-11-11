@@ -31,3 +31,8 @@ function addAccountToGroup(accID, newGroupID, success, failure){
     isSessionIDSet()
     callApi("/api/f/account/addToGroup?id=" + accID, 'POST',{newgroupid: newGroupID}, success, failure)
 }
+
+function doTransaction(sourceID, targetID, amount, success, failure){
+    isSessionIDSet()
+    callApi("/api/f/account/transaction", 'POST', {sourceid: sourceID, targetid: targetID, amount: amount}, success, failure)
+}

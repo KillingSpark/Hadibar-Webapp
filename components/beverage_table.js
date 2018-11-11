@@ -5,12 +5,28 @@ Vue.component('bev-table', {
     return {
       beverages: [],
       bev_value: 0,
-      bev_name: ""
+      bev_name: "",
     }
   },
-  props: ["current_account"],
+  computed:{
+    targetacc: function() {
+      target = {}
+      this.accs.forEach( function(acc){
+        if (acc.Owner.Name == "bank"){
+          target = acc
+        }
+      }
+      )
+      return target
+    }
+  },
+  props: ['current_account', 'accs'],
   template:
     ` <div>
+      <div class="row">
+      <div class="col-md-3">
+      </div>
+      </div>
       <div class="row">
         <table id="bev_table" class="table-bordered table-hover col-md-3">
             <thead>
@@ -40,11 +56,14 @@ Vue.component('bev-table', {
           </div>
       </div>
       <div class="row">
-        <button v-on:click="updateSelectedAccountWithSelectedBeverages">Execute</button>
+        <button v-on:click="call_transaction">Execute</button>
       </div>
     </div>
     `,
   methods: {
+    select_target: function(idx) {
+      this.targetacc = this.accs[idx]
+    },
     sum_selected_beverages: function (event) {
       var sum = 0
       for (var i = 0; i < this.beverages.length; i++) {
@@ -52,11 +71,11 @@ Vue.component('bev-table', {
       }
       return -sum
     },
-    updateSelectedAccountWithSelectedBeverages: function () {
+    call_transaction: function () {
       comp = this
-      updateAccount(this.current_account.ID, this.sum_selected_beverages(), this.current_account.Name, function (acc) {
-        comp.current_account.Value = acc.Value
-      }, displayError())
+      doTransaction(this.current_account.ID, this.targetacc.ID, -this.sum_selected_beverages(), function (acc) {
+        bevapp.updateAccounts()
+      }, displayError)
     },
     call_delete: function (index) {
       var comp = this
