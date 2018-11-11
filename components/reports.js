@@ -11,13 +11,19 @@ Vue.component('reports',
     <button v-on:click=call_account_report>Generate AccountList</button>
     <br>
     <br>
-    <div style="width:100%" v-html=accReportHtml></div>
+    <div class="row">
+    <div class="col-md-3" v-html=accReportHtml></div>
+    </div>
     <br>
     <br>
     <button v-on:click=call_beverage_report>Generate BeverageList</button>
     <br>
     <br>
-    <div style="width:100%" v-html=bevReportHtml></div>
+    <div class="row">
+    <div class="col-md-12"> 
+    <div v-html=bevReportHtml></div>
+    </div>
+    </div>
     </div>`,
         methods: {
             call_account_report: function () {
