@@ -25,7 +25,7 @@
     <div id="app" v-on:update-accounts="updateAccounts" class="container-fluid tabcontent">
             <div class="tab row">
                     <button class="col-md-6 tablink  active" v-on:click="openApp($event, 'bev-table')">Beverages</button>
-                    <button class="col-md-6 tablink" v-on:click="openApp($event, 'direct-payment')">Direct</button>
+                    <button class="col-md-6 tablink" v-on:click="openApp($event, 'direct-payment')">AccountManager</button>
                 </div>
                 <div class="content container-fluid">
                     <acc-info-table v-bind:selected_cb=selectNewAcc v-bind:accs="accounts" v-bind:show_payment="show_payment" v-bind:account="current_account"></acc-info-table>
