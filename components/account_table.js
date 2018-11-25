@@ -88,7 +88,10 @@ Vue.component('acc-info-table', {
   methods: {
     make_payment: function () {
       diff = Number(this.difference)
-      updateAccount(this.account.ID, diff, this.account.Owner.Name, function(newacc){
+      //updateAccount(this.account.ID, diff, this.account.Owner.Name, function(newacc){
+      //  bevapp.updateAccounts()
+      //}, displayError)
+      doTransaction("0", this.account.ID, diff, function(res){
         bevapp.updateAccounts()
       }, displayError)
     },
@@ -125,7 +128,6 @@ Vue.component('acc-info-table', {
       if (isempty(this.targetacc )){
         this.targetacc = this.accs[0]
       }
-      alert(this.transvalue)
       doTransaction(this.sourceacc.ID, this.targetacc.ID, Number(this.transvalue), function(res){
         bevapp.updateAccounts()
       }, displayError)

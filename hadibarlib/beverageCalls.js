@@ -2,9 +2,9 @@
 //          Beverages           //
 //////////////////////////////////
 
-function newBeverage(newValue, newName, success, failure){
+function newBeverage(newValue, newName, newAvailable, success, failure){
     isSessionIDSet()
-    callApi("/api/f/beverage/new", 'PUT',{value: newValue, name: newName}, success, failure)   
+    callApi("/api/f/beverage/new", 'PUT',{value: newValue, available: newAvailable, name: newName}, success, failure)   
 }
 
 function getBeverages(success, failure){
@@ -17,9 +17,9 @@ function getBeverage(bevID, success, failure){
     callApi("/api/f/beverage/get?id=" + bevID, 'GET',{}, success, failure)   
 }
 
-function updateBeverage(bevID, newValue, newName, success, failure){
+function updateBeverage(bevID, newValue, newAvailable, newName, success, failure){
     isSessionIDSet()
-    callApi("/api/f/beverage/update?id=" + bevID, 'POST',{value: newValue, name: newName}, success, failure)   
+    callApi("/api/f/beverage/update?id=" + bevID, 'POST',{value: newValue, available: newAvailable, name: newName}, success, failure)   
 }
 
 function deleteBeverage(bevID, success, failure){
