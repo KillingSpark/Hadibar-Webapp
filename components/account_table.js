@@ -1,22 +1,40 @@
-/// <reference path="../node_modules/@types/jquery/index.d.ts" />
-
 Vue.component('acc-option', {
-  props: ['name', 'index', 'selected_cb'],
+  props: ['name', 'selected_cb'],
   template: `<option v-on:click="selected_cb(index)"> {{name}} </option>`,
-  methods:{
-    select_account: function(){
-      bevapp.selectNewAcc(this.index)
-    }
-  }
 })
 
 Vue.component('acc-select', {
   props: ['accs', 'selected_cb'],
   template: `
     <select style="width: 100%">
-      <acc-option v-for="(acc, index) in accs" v-bind:selected_cb="selected_cb" v-bind:key="acc" v-bind:name="acc.Owner.Name" v-bind:index="index" />
+      <acc-option v-for="acc in accs" v-bind:selected_cb="selected_cb" v-bind:key="acc" v-bind:name="acc.Owner.Name" />
     </select>
     `
+})
+
+Vue.component('acc-select-info', {
+  props: ['accs', 'account', 'selected_cb'],
+  computed: {
+    isNegativ: function () {
+      return Number(this.account.Value) < 0
+    }
+  },
+  template: `
+  <table id="acc_table" class="table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><acc-select v-bind:selected_cb="selected_cb" v-bind:accs="accs"></acc-select></td>
+            <td v-bind:class="{danger: isNegativ, success: !isNegativ}">{{account.Value}}</td>
+        </tr>
+    </tbody>
+  </table>
+  `
 })
 
 Vue.component('acc-info-table', {
@@ -29,34 +47,16 @@ Vue.component('acc-info-table', {
       targetacc: {}
     }
   },
-  computed: {
-    isNegativ: function () {
-      return Number(this.account.Value) < 0
-    }
-  },
-  props: ['account', 'show_payment', 'accs', 'selected_cb'],
+  props: ['account', 'accs', 'selected_cb'],
   template: `
   <div>
     <div class="row">
-      <table id="acc_table" class="table-bordered col-md-3">
-          <thead>
-              <tr>
-                  <th>Name</th>
-                  <th>Value</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr>
-                  <td><acc-select v-bind:selected_cb="selected_cb" v-bind:accs="accs"></acc-select></td>
-                  <td v-bind:class="{danger: isNegativ, success: !isNegativ}">{{account.Value}}</td>
-              </tr>
-          </tbody>
-      </table>
+      <acc-select-info v-bind:selected_cb="selected_cb" v-bind:account="account" v-bind:accs="accs"></acc-select-info>
     </div>
-      <button v-if="show_payment" v-on:click=call_delete>Delete Account</button>
+      <button v-on:click=call_delete>Delete Account</button>
       
       <br><br>
-      <div v-if="show_payment" class="row">
+      <div class="row">
         <hr>
         <h1>Change value of the account</h1>
         <input type="text" v-model="difference" placeholder="Difference to add to the account"/>

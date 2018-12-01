@@ -44,7 +44,7 @@
 
 
         <div class="content container-fluid">
-            <acc-info-table v-bind:selected_cb=selectNewAcc v-bind:accs="accounts" v-bind:show_payment="show_payment" v-bind:account="current_account"></acc-info-table>
+            <acc-info-table v-bind:accs="accounts" v-show="show_payment" v-bind:account="current_account"></acc-info-table>
             <br>
             <br>
             <bev-table v-show="show_table" v-bind:accs="accounts" v-bind:current_account="current_account"></bev-table>

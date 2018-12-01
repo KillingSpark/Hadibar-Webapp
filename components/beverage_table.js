@@ -1,5 +1,3 @@
-/// <reference path="../node_modules/@types/jquery/index.d.ts" />
-
 Vue.component('bev-table', {
   data: function () {
     return {
@@ -9,11 +7,11 @@ Vue.component('bev-table', {
       bev_name: "",
     }
   },
-  computed:{
-    targetacc: function() {
+  computed: {
+    targetacc: function () {
       target = {}
-      this.accs.forEach( function(acc){
-        if (acc.Owner.Name == "bank"){
+      this.accs.forEach(function (acc) {
+        if (acc.Owner.Name == "bank") {
           target = acc
         }
       }
@@ -23,57 +21,78 @@ Vue.component('bev-table', {
   },
   props: ['current_account', 'accs'],
   template:
-    ` <div>
+  ` <div>
       <div class="row">
       <div class="col-md-3">
-      </div>
-      </div>
-      <div class="row">
+      <acc-select-info v-bind:selected_cb="select_source" v-bind:account="current_account" v-bind:accs="accs"></acc-select-info>
+
+      <br>
+
+      <form>
         <table id="bev_table" class="table-bordered table-hover col-md-3">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Value</th>
-                    <th>Available</th>
-                    <th>Times</th>
-                    <th>Delete</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(bev, index) in beverages" v-bind:bev="bev">
-                    <td>{{bev.Name}}</td>
-                    <td class="center">{{bev.Value}}</td>
-                    <td class="center">{{bev.Available}}</td>
-                    <td><input v-model="beverages[index].times" type="text" style="width: 100%" /></td>
-                    <td class="danger center" v-on:click="call_delete(index)">X</td>
-                </tr>
-            </tbody>
+          <thead>
+              <tr>
+                  <th>Name</th>
+                  <th>Value</th>
+                  <th>Times</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr v-for="(bev, index) in beverages" v-bind:bev="bev">
+                <td>{{bev.Name}}</td>
+                <td class="center">{{bev.Value}}</td>
+                <td><input v-model="beverages[index].times" type="text" style="width: 100%" /></td>
+              </tr>
+          </tbody>
         </table>
-        <div class="col-md-6" id="makedrink">
-            <span id="makedrinktext">MAKE ALL THE DRINKS!</span>
-            <br>
-            <input type="text" v-model="bev_name" placeholder="name" />
-            <input type="text" v-model="bev_value" placeholder="value in cents" />
-            <input type="text" v-model="bev_avail" placeholder="how many" />
-            <br>
-            <button style="margin-top: 1%;" class="col-md-2" v-on:click="call_add">Add</button>
-          </div>
+        <button type="submit" class="btn" v-on:click="call_transaction">Execute</button>
+      </form>
       </div>
-      <div class="row">
-        <button v-on:click="call_transaction">Execute</button>
+      <div class="col-md-3">
+        <table id="bev_table" class="table-bordered table-hover col-md-3">
+          <thead>
+              <tr>
+                  <th>Name</th>
+                  <th>Value</th>
+                  <th>Available</th>
+                  <th>Delete</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr v-for="(bev, index) in beverages" v-bind:bev="bev">
+                <td>{{bev.Name}}</td>
+                <td class="center">{{bev.Value}}</td>
+                <td class="center">{{bev.Available}}</td>
+                <td class="danger center" v-on:click="call_delete(index)">X</td>
+              </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-3" id="makedrink">
+          <form>
+          <span id="makedrinktext">Create a new beverage</span>
+          <br>
+          <div class="form-group">
+          <input type=text class="form-text form-control form-control-sm" v-model="bev_name" placeholder="name" />
+          <input type=text class="form-text form-control form-control-sm" v-model="bev_value" placeholder="value in cents" />
+          <input type=text class="form-text form-control form-control-sm" v-model="bev_avail" placeholder="how many" />
+          </div>
+          <button type="submit" class="btn" v-on:click="call_add">Add</button>
+          <form>
+      </div>
       </div>
     </div>
     `,
   methods: {
-    select_target: function(idx) {
-      this.targetacc = this.accs[idx]
+    select_source: function (acc) {
+      bevapp.selectNewAcc(acc)
     },
     sum_selected_beverages: function (event) {
       var sum = 0
       for (var i = 0; i < this.beverages.length; i++) {
         sum += this.beverages[i].times * this.beverages[i].Value
-        updateBeverage(this.beverages[i].ID, this.beverages[i].Value, Number(this.beverages[i].Available)-Number(this.beverages[i].times), this.beverages[i].Name,
-          function(){}, displayError)
+        updateBeverage(this.beverages[i].ID, this.beverages[i].Value, Number(this.beverages[i].Available) - Number(this.beverages[i].times), this.beverages[i].Name,
+          function () { }, displayError)
       }
       this.updateBeverages()
       return -sum

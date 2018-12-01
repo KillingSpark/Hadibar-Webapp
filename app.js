@@ -7,7 +7,7 @@ var bevapp = new Vue({
     current_account: {}
   },
   methods: {
-    selectNewAcc: function (index) { this.current_account = this.accounts[index]},
+    selectNewAcc: function (account) { this.current_account = account},
     openApp: function (event, app_name) {
       if (app_name === 'bev-table') {
         this.show_table = true
