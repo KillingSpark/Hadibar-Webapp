@@ -1,5 +1,3 @@
-/// <reference path="node_modules/@types/jquery/index.d.ts" />
-
 var bevapp = new Vue({
   el: '#app',
   data: {
@@ -11,11 +9,6 @@ var bevapp = new Vue({
   methods: {
     selectNewAcc: function (index) { this.current_account = this.accounts[index]},
     openApp: function (event, app_name) {
-      var tabs = document.getElementsByClassName('tablink')
-      for (var i = 0; i < tabs.length; i++) {
-        tabs[i].classList.remove('active')
-      }
-      event.currentTarget.classList.add('active')
       if (app_name === 'bev-table') {
         this.show_table = true
         this.show_payment = false

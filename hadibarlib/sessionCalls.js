@@ -4,7 +4,7 @@
 
 
 function getSession(){
-    callApi("/api/session/getid", 'GET', {}, function(id){sessionID = id}, function(){alert("AAAA")})
+    callApi("/api/session/getid", 'GET', {}, function(id){sessionID = id}, function(){})
 }
 
 function doLogin(name, pw, success, failure){

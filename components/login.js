@@ -1,5 +1,3 @@
-/// <reference path="../node_modules/@types/jquery/index.d.ts" />
-
 Vue.component('login-form', {
     data: function () {
         return {
@@ -9,18 +7,21 @@ Vue.component('login-form', {
         }
     },
     template: `
-        <div class="navbar navbar-fixed-bottom">
-            <div v-if="show_login">
-                <span id="logintext">Log your ass in!</span>
-                <input type=text v-model="name" placeholder="Name"/>
-                <input type=password v-model="password" placeholder="Passwort"/>
-                <button class="login_button" v-on:click="call_login">LOGIN</button>
+        <nav class="navbarnavbar fixed-bottom navbar-expand-lg navbar-light bg-light">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div v-if="show_login">
+                    <form class="form-inline">
+                        <input type=text class="form-text form-control form-control-sm" v-model="name" placeholder="Name"/>
+                        <input type=password class="form-text form-control form-control-sm" v-model="password" placeholder="Passwort"/>
+                        <button type="submit" class="btn" v-on:click="call_login">LOGIN</button>
+                    </form>
+                </div>
+                <div v-if="!show_login">
+                    <span id="logintext">Log your ass out!</span>
+                    <button type="submit" class="btn" v-on:click="call_login">LOGOUT</button>
+                </div>
             </div>
-            <div v-if="!show_login">
-                <span id="logintext">Log your ass out!</span>
-                <button class="login_button" v-on:click="call_logout">LOGOUT</button>
-            </div>
-        </div>
+        </nav>
     `,
     methods:{
         call_login: function(){
