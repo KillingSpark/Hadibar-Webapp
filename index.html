@@ -30,8 +30,8 @@
 <body>
     <div id="app">
         <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-primary">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <a class="navbar-brand" href="#">HaDiBar</a>
@@ -44,8 +44,12 @@
                     <a href="#" class="nav-item nav-link" v-on:click="openApp($event, 'bevmatrix')">Beverage Matrix</a>
                 </div>
             </div>
+            <div class="collapse navbar-collapse order-3" id="navbarSupportedContent">
+                <login-form></login-form>
+            </div>
         </nav>
 
+        <br>
 
         <div class="content container-fluid">
             <acc-info-table v-bind:accs="accounts" v-show="show_accs"></acc-info-table>
@@ -53,7 +57,6 @@
             <reports v-show="show_reports"></reports>
             <bevmatrix v-show="show_bevmatrix"></bevmatrix>
         </div>
-        <login-form></login-form>
     </div>
     <script src="app.js"></script>
 </body>

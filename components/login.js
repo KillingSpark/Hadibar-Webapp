@@ -7,20 +7,18 @@ Vue.component('login-form', {
         }
     },
     template: `
-        <nav class="navbarnavbar fixed-bottom navbar-expand-lg navbar-light bg-light">
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <div v-if="show_login">
-                    <form class="form-inline">
-                        <input type=text class="form-text form-control form-control-sm" v-model="name" placeholder="Name"/>
-                        <input type=password class="form-text form-control form-control-sm" v-model="password" placeholder="Passwort"/>
-                        <button type="submit" class="btn" v-on:click="call_login">LOGIN</button>
-                    </form>
-                </div>
-                <div v-if="!show_login">
-                    <button type="submit" class="btn" v-on:click="call_logout">LOGOUT {{name}}</button>
-                </div>
-            </div>
-        </nav>
+    <div>
+        <div v-if="show_login">
+            <form class="form-inline">
+                <input type=text class="form-text form-control form-control-sm" v-model="name" placeholder="Name"/>
+                <input type=password class="form-text form-control form-control-sm" v-model="password" placeholder="Passwort"/>
+                <button type="submit" class="btn btn-primary" v-on:click="call_login">LOGIN</button>
+            </form>
+        </div>
+        <div v-if="!show_login">
+            <button type="submit" class="btn btn-primary" v-on:click="call_logout">LOGOUT {{name}}</button>
+        </div>
+    </div>
     `,
     methods:{
         call_login: function(){

@@ -24,12 +24,12 @@ Vue.component('bev-table', {
   template:
     ` <div>
       <div class="row">
-      <div class="col-md-3">
+      <div class="col">
       <h2>Payments</h2>
       <acc-select-info v-bind:selected_cb="select_source" v-bind:account="current_account" v-bind:accs="accs"></acc-select-info>
       <br>
       <form>
-        <table id="bev_table" class="table-bordered table-hover col-md-3">
+        <table id="bev_table" class="table">
           <thead>
               <tr>
                   <th>Name</th>
@@ -41,16 +41,16 @@ Vue.component('bev-table', {
               <tr v-for="(bev, index) in beverages" v-bind:bev="bev">
                 <td>{{bev.Name}}</td>
                 <td class="center">{{bev.Value}}</td>
-                <td><input v-model="beverages[index].times" type="text" style="width: 100%" /></td>
+                <td><input class="form-text form-control" v-model="beverages[index].times" type="text" /></td>
               </tr>
           </tbody>
         </table>
         <button type="submit" class="btn" v-on:click="call_transaction">Execute</button>
       </form>
       </div>
-      <div class="col-md-3">
+      <div class="col">
         <h2>Inventory</h2>
-        <table id="bev_table" class="table-bordered table-hover col-md-3">
+        <table id="bev_table" class="table">
           <thead>
               <tr>
                   <th>Name</th>
@@ -64,7 +64,9 @@ Vue.component('bev-table', {
                 <td>{{bev.Name}}</td>
                 <td class="center">{{bev.Value}}</td>
                 <td class="center">{{bev.Available}}</td>
-                <td class="danger" style="text-align: center; width: 100%;" v-on:click="call_delete(index)">X</td>
+                <td class="danger">
+                <button class="btn bg-danger" style="text-align: center;" v-on:click="call_delete(index)">X</button>
+                </td>
               </tr>
           </tbody>
         </table>
@@ -72,7 +74,6 @@ Vue.component('bev-table', {
       <div class="col-3" id="makedrink">
           <form>
           <h2 id="makedrinktext">New beverages</h2>
-          <br>
           <div class="form-group">
           <input type=text class="form-text form-control form-control-sm" v-model="bev_name" placeholder="name" />
           <input type=text class="form-text form-control form-control-sm" v-model="bev_value" placeholder="value in cents" />
