@@ -1,8 +1,8 @@
 var bevapp = new Vue({
   el: '#app',
   data: {
-    show_table: true,
-    show_payment: false,
+    show_table: false,
+    show_payment: true,
     accounts: [],
     current_account: {}
   },

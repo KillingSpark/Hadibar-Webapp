@@ -9,7 +9,7 @@ Vue.component('reports',
         },
         template: `
     <div>
-    <button v-on:click=call_account_report>Generate AccountList</button>
+    <button class="btn" v-on:click=call_account_report>Generate AccountList</button>
     <br>
     <br>
     <div class="row">
@@ -17,7 +17,7 @@ Vue.component('reports',
     </div>
     <br>
     <br>
-    <button v-on:click=call_beverage_report>Generate BeverageList</button>
+    <button class="btn" v-on:click=call_beverage_report>Generate BeverageList</button>
     <br>
     <br>
     <div class="row">
@@ -27,7 +27,7 @@ Vue.component('reports',
     </div>
     <br>
     <br>
-    <button v-on:click=call_tx_report>Generate TransactionList</button>
+    <button class="btn" v-on:click=call_tx_report>Generate TransactionList</button>
     <br>
     <br>
     <div class="row">
