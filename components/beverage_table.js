@@ -48,6 +48,9 @@ Vue.component('bev-table', {
         <button type="submit" class="btn" v-on:click="call_transaction">Execute</button>
       </form>
       </div>
+
+      <div class="col-2"></div>
+
       <div class="col">
         <h2>Inventory</h2>
         <table id="bev_table" class="table">
@@ -71,7 +74,8 @@ Vue.component('bev-table', {
           </tbody>
         </table>
       </div>
-      <div class="col-3" id="makedrink">
+
+      <div class="col" id="makedrink">
           <form>
           <h2 id="makedrinktext">New beverages</h2>
           <div class="form-group">
