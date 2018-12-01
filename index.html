@@ -6,9 +6,10 @@
     <meta charset="utf-8">
 
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="app.css">
+
     <script src="vue-2.5.17.js"></script>
     <script src="jquery-3.3.1.js"></script>
-
     <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
 
@@ -21,6 +22,7 @@
     <script src="components/account_table.js"></script>
     <script src="components/beverage_table.js"></script>
     <script src="components/reports.js"></script>
+    <script src="components/beverage_matrix.js"></script>
     <script src="components/login.js"></script>
     <title>HaDiBar</title>
 </head>
@@ -36,18 +38,20 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <div class="navbar-nav">
-                    <a href="#" class="nav-item nav-link" v-on:click="openApp($event, 'bev-table')">Beverages</a>
-                    <a href="#" class="nav-item nav-link" v-on:click="openApp($event, 'direct-payment')">AccountManager</a>
+                    <a href="#" class="nav-item nav-link" v-on:click="openApp($event, 'bevs')">Beverages</a>
+                    <a href="#" class="nav-item nav-link" v-on:click="openApp($event, 'accs')">AccountManager</a>
+                    <a href="#" class="nav-item nav-link" v-on:click="openApp($event, 'reports')">Reports</a>
+                    <a href="#" class="nav-item nav-link" v-on:click="openApp($event, 'bevmatrix')">Beverage Matrix</a>
                 </div>
             </div>
         </nav>
 
 
         <div class="content container-fluid">
-            <acc-info-table v-bind:accs="accounts" v-show="show_payment" v-bind:account="current_account"></acc-info-table>
-            <br>
-            <br>
-            <bev-table v-show="show_table" v-bind:accs="accounts" v-bind:current_account="current_account"></bev-table>
+            <acc-info-table v-bind:accs="accounts" v-show="show_accs"></acc-info-table>
+            <bev-table v-show="show_bevs" v-bind:accs="accounts"></bev-table>
+            <reports v-show="show_reports"></reports>
+            <bevmatrix v-show="show_bevmatrix"></bevmatrix>
         </div>
         <login-form></login-form>
     </div>

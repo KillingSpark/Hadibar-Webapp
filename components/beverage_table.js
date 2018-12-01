@@ -2,6 +2,7 @@ Vue.component('bev-table', {
   data: function () {
     return {
       beverages: [],
+      current_account: {},
       bev_value: "",
       bev_avail: "",
       bev_name: "",
@@ -19,15 +20,14 @@ Vue.component('bev-table', {
       return target
     }
   },
-  props: ['current_account', 'accs'],
+  props: ['accs'],
   template:
   ` <div>
       <div class="row">
       <div class="col-md-3">
+      <h2>Payments</h2>
       <acc-select-info v-bind:selected_cb="select_source" v-bind:account="current_account" v-bind:accs="accs"></acc-select-info>
-
       <br>
-
       <form>
         <table id="bev_table" class="table-bordered table-hover col-md-3">
           <thead>
@@ -49,6 +49,7 @@ Vue.component('bev-table', {
       </form>
       </div>
       <div class="col-md-3">
+        <h2>Inventory</h2>
         <table id="bev_table" class="table-bordered table-hover col-md-3">
           <thead>
               <tr>
@@ -63,14 +64,14 @@ Vue.component('bev-table', {
                 <td>{{bev.Name}}</td>
                 <td class="center">{{bev.Value}}</td>
                 <td class="center">{{bev.Available}}</td>
-                <td class="danger center" v-on:click="call_delete(index)">X</td>
+                <td class="danger" style="text-align: center; width: 100%;" v-on:click="call_delete(index)">X</td>
               </tr>
           </tbody>
         </table>
       </div>
-      <div class="col-md-3" id="makedrink">
+      <div class="col-3" id="makedrink">
           <form>
-          <span id="makedrinktext">Create a new beverage</span>
+          <h2 id="makedrinktext">New beverages</h2>
           <br>
           <div class="form-group">
           <input type=text class="form-text form-control form-control-sm" v-model="bev_name" placeholder="name" />
@@ -78,29 +79,30 @@ Vue.component('bev-table', {
           <input type=text class="form-text form-control form-control-sm" v-model="bev_avail" placeholder="how many" />
           </div>
           <button type="submit" class="btn" v-on:click="call_add">Add</button>
-          <form>
+          </form>
       </div>
       </div>
     </div>
     `,
   methods: {
-    select_source: function (acc) {
-      bevapp.selectNewAcc(acc)
+    select_source: function (idx) {
+      this.current_account = this.accs[idx]
     },
     sum_selected_beverages: function (event) {
       var sum = 0
       for (var i = 0; i < this.beverages.length; i++) {
-        sum += this.beverages[i].times * this.beverages[i].Value
-        updateBeverage(this.beverages[i].ID, this.beverages[i].Value, Number(this.beverages[i].Available) - Number(this.beverages[i].times), this.beverages[i].Name,
-          function () { }, displayError)
+        bev = this.beverages[i]
+        sum += bev.times * bev.Value
+        updateBeverage(bev.ID, bev.Value, Number(bev.Available) - Number(bev.times), bev.Name,
+          function (resbev) { bev.Available = resbev.Available }, displayError)
       }
-      this.updateBeverages()
-      return -sum
+      return sum
     },
     call_transaction: function () {
       comp = this
-      doTransaction(this.current_account.ID, this.targetacc.ID, -this.sum_selected_beverages(), function (acc) {
-        bevapp.updateAccounts()
+      amount = this.sum_selected_beverages()
+      doTransaction(this.current_account.ID, this.targetacc.ID, amount, function () {
+        comp.current_account.Value -= amount
       }, displayError)
     },
     call_delete: function (index) {
@@ -121,14 +123,20 @@ Vue.component('bev-table', {
     updateBeverages: function () {
       var comp = this
       getBeverages(function (response) {
-        comp.beverages = response
-        comp.beverages.forEach(function (element) {
-          element.times = 0
-        }, this);
+        if (response != null) {
+          comp.beverages = response
+          comp.beverages.forEach(function (element) {
+            element.times = 0
+          }, this);
+        }
       }, displayError)
     },
   },
   created: function () {
     loginHooks.push(this.updateBeverages)
+    comp = this
+    logoutHooks.push(function(){
+      comp.beverages = []
+    })
   }
 })

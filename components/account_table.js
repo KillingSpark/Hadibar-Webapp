@@ -1,26 +1,41 @@
 Vue.component('acc-option', {
-  props: ['name', 'selected_cb'],
-  template: `<option v-on:click="selected_cb(index)"> {{name}} </option>`,
+  props: ['name', 'idx', 'selected_cb'],
+  template: `<option v-on:click="selected_cb(idx)"> {{name}} </option>`,
 })
 
 Vue.component('acc-select', {
   props: ['accs', 'selected_cb'],
   template: `
     <select style="width: 100%">
-      <acc-option v-for="acc in accs" v-bind:selected_cb="selected_cb" v-bind:key="acc" v-bind:name="acc.Owner.Name" />
+      <acc-option v-for="(acc, idx) in accs" v-bind:selected_cb="selected_cb" v-bind:key="idx" v-bind:idx="idx" v-bind:name="acc.Owner.Name" />
     </select>
     `
 })
 
 Vue.component('acc-select-info', {
-  props: ['accs', 'account', 'selected_cb'],
+  props: ['accs', 'selected_cb'],
+  data: function(){return {
+    idx: 0,
+  }},
+  methods:{
+    acc_selected_cb: function(idx) {
+      this.idx = idx
+      this.selected_cb(idx)
+    }
+  },
   computed: {
     isNegativ: function () {
-      return Number(this.account.Value) < 0
+      return this.current_val < 0
+    },
+    current_val: function() {
+      if (typeof this.accs[this.idx] != 'undefined'){
+        return this.accs[this.idx].Value
+      }
+      return 0
     }
   },
   template: `
-  <table id="acc_table" class="table-bordered">
+  <table style="width: 100%;" id="acc_table" class="table-bordered">
     <thead>
         <tr>
             <th>Name</th>
@@ -29,8 +44,8 @@ Vue.component('acc-select-info', {
     </thead>
     <tbody>
         <tr>
-            <td><acc-select v-bind:selected_cb="selected_cb" v-bind:accs="accs"></acc-select></td>
-            <td v-bind:class="{danger: isNegativ, success: !isNegativ}">{{account.Value}}</td>
+            <td><acc-select v-bind:selected_cb="acc_selected_cb" v-bind:accs="accs"></acc-select></td>
+            <td v-bind:class="{danger: isNegativ, success: !isNegativ}">{{current_val}}</td>
         </tr>
     </tbody>
   </table>
@@ -44,15 +59,16 @@ Vue.component('acc-info-table', {
       newname: "",
       transvalue: 0,
       sourceacc: {},
-      targetacc: {}
+      targetacc: {},
+      account: {}
     }
   },
-  props: ['account', 'accs', 'selected_cb'],
+  props: ['accs'],
   template: `
   <div>
     <div class="row">
     <div class="col-md-3">
-      <acc-select-info v-bind:selected_cb="selected_cb" v-bind:account="account" v-bind:accs="accs"></acc-select-info>
+      <acc-select-info v-bind:selected_cb="select_acc" v-bind:accs="accs"></acc-select-info>
       <button class="btn" v-on:click=call_delete>Delete Account</button>
       <br>
       <form>
@@ -66,7 +82,7 @@ Vue.component('acc-info-table', {
     
     <div class="col-md-3">
       <form class="">
-      <label for="new_acc">Add new account</span>
+      <label for="new_acc">Add new account</label>
       <input type="text" class="form-text" id="new_acc" v-model="newname" placeholder="Name for the new account"/>
       <button type=submit class="btn" v-on:click=call_add>Add</button>
       </form>
@@ -91,29 +107,23 @@ Vue.component('acc-info-table', {
     </div>
 
     <hr>
-
-    <div class="row">
-    <div class="col">
-      <h1>Generate all the reports</h1>
-      <reports></reports>
-    </div>
-    </div>
   </div>  
   `,
   methods: {
+    select_acc: function (idx) {
+      this.account = this.accs[idx]
+    },
     make_payment: function () {
       diff = Number(this.difference)
-      //updateAccount(this.account.ID, diff, this.account.Owner.Name, function(newacc){
-      //  bevapp.updateAccounts()
-      //}, displayError)
+      comp = this
       doTransaction("0", this.account.ID, diff, function(res){
-        bevapp.updateAccounts()
+        comp.account.Value += diff
       }, displayError)
     },
     call_add: function() {
       comp = this
       newAccount(0, this.newname, function(newacc){
-        bevapp.updateAccounts()
+        bevapp.accounts.push(newacc)
       }, displayError)
     },
     call_delete: function() {

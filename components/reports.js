@@ -3,27 +3,19 @@ Vue.component('reports',
         data: function () {
             return {
                 accReportHtml: "",
-                bevReportHtml: "",
+                showaccreport: true,
                 txReportHtml: "",
+                showtxreport: false
             }
         },
         template: `
-    <div>
+    <div class="row">
+    <div class="col">
     <button class="btn" v-on:click=call_account_report>Generate AccountList</button>
     <br>
     <br>
     <div class="row">
-    <div class="col-md-3" v-html=accReportHtml></div>
-    </div>
-    <br>
-    <br>
-    <button class="btn" v-on:click=call_beverage_report>Generate BeverageList</button>
-    <br>
-    <br>
-    <div class="row">
-    <div class="col-md-12"> 
-    <div v-html=bevReportHtml></div>
-    </div>
+    <div class="col-md-3" v-show="showaccreport" v-html=accReportHtml></div>
     </div>
     <br>
     <br>
@@ -32,28 +24,30 @@ Vue.component('reports',
     <br>
     <div class="row">
     <div class="col-md-12"> 
-    <div v-html=txReportHtml></div>
+    <div v-show="showtxreport" v-html=txReportHtml></div>
+    </div>
+    </div>
     </div>
     </div>
     </div>`,
         methods: {
             call_account_report: function () {
-                that = this
-                accountReport(function (report) {
-                    that.accReportHtml = report
-                }, displayError)
-            },
-            call_beverage_report: function () {
-                that = this
-                beverageReport(function (report) {
-                    that.bevReportHtml = report
-                }, displayError)
+                this.showaccreport = !this.showaccreport
+                if (this.showaccreport){
+                    that = this
+                    accountReport(function (report) {
+                        that.accReportHtml = report
+                    }, displayError)
+                }
             },
             call_tx_report: function () {
-                that = this
-                transactionReport("", function (report) {
-                    that.txReportHtml = report
-                }, displayError)
+                this.showtxreport = !this.showtxreport
+                if (this.showtxreport){
+                    that = this
+                    transactionReport("", function (report) {
+                        that.txReportHtml = report
+                    }, displayError)
+                }
             }
         }
     })

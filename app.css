@@ -1,0 +1,18 @@
+#matrix {
+    border-width: 1px;
+    border-style: solid;
+    border-color: black;
+    width: 100%;
+}
+
+#matrix th {
+    border-width: 3px;
+    border-style: solid;
+    border-color: black;
+}
+
+#matrix td {
+    border-width: 1px;
+    border-style: solid;
+    border-color: black;
+}

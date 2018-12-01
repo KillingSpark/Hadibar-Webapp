@@ -17,8 +17,7 @@ Vue.component('login-form', {
                     </form>
                 </div>
                 <div v-if="!show_login">
-                    <span id="logintext">Log your ass out!</span>
-                    <button type="submit" class="btn" v-on:click="call_login">LOGOUT</button>
+                    <button type="submit" class="btn" v-on:click="call_logout">LOGOUT {{name}}</button>
                 </div>
             </div>
         </nav>
