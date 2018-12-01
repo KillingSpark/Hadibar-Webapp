@@ -16,3 +16,22 @@
     border-style: solid;
     border-color: black;
 }
+
+#accreport {
+    border-width: 1px;
+    border-style: solid;
+    border-color: black;
+    width: 100%;
+}
+
+#accreport th {
+    border-width: 3px;
+    border-style: solid;
+    border-color: black;
+}
+
+#accreport td {
+    border-width: 1px;
+    border-style: solid;
+    border-color: black;
+}

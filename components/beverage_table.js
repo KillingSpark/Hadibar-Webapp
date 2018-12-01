@@ -22,7 +22,7 @@ Vue.component('bev-table', {
   },
   props: ['accs'],
   template:
-  ` <div>
+    ` <div>
       <div class="row">
       <div class="col-md-3">
       <h2>Payments</h2>
@@ -93,16 +93,24 @@ Vue.component('bev-table', {
       for (var i = 0; i < this.beverages.length; i++) {
         bev = this.beverages[i]
         sum += bev.times * bev.Value
-        updateBeverage(bev.ID, bev.Value, Number(bev.Available) - Number(bev.times), bev.Name,
-          function (resbev) { bev.Available = resbev.Available }, displayError)
       }
       return sum
+    },
+    updateAvailable: function () {
+      for (var i = 0; i < this.beverages.length; i++) {
+        bev = this.beverages[i]
+        comp = this
+        idx = i
+        updateBeverage(bev.ID, bev.Value, Number(bev.Available) - Number(bev.times), bev.Name,
+          function (resbev) { if(idx >= comp.beverages.length-1){comp.updateBeverages()}  }, displayError)
+      }
     },
     call_transaction: function () {
       comp = this
       amount = this.sum_selected_beverages()
       doTransaction(this.current_account.ID, this.targetacc.ID, amount, function () {
         comp.current_account.Value -= amount
+        comp.updateAvailable()
       }, displayError)
     },
     call_delete: function (index) {
@@ -135,7 +143,7 @@ Vue.component('bev-table', {
   created: function () {
     loginHooks.push(this.updateBeverages)
     comp = this
-    logoutHooks.push(function(){
+    logoutHooks.push(function () {
       comp.beverages = []
     })
   }
