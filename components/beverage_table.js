@@ -110,13 +110,15 @@ Vue.component('bev-table', {
           function (resbev) { if(idx >= comp.beverages.length-1){comp.updateBeverages()}  }, displayError)
       }
     },
-    call_transaction: function () {
+    call_transaction: function (e) {
+      e.preventDefault()
       comp = this
       amount = this.sum_selected_beverages()
       doTransaction(this.current_account.ID, this.targetacc.ID, amount, function () {
         comp.current_account.Value -= amount
         comp.updateAvailable()
       }, displayError)
+      return false
     },
     call_delete: function (index) {
       var comp = this
@@ -124,14 +126,17 @@ Vue.component('bev-table', {
         function (response) {
           comp.beverages.splice(index, 1)
         }, displayError)
+        return false
     },
-    call_add: function () {
+    call_add: function (e) {
+      e.preventDefault()
       var comp = this
       newBeverage(Number(this.bev_value), this.bev_name, Number(this.bev_avail),
         function (response) {
           response.times = 0
           comp.beverages.push(response)
         }, displayError)
+        return false
     },
     updateBeverages: function () {
       var comp = this

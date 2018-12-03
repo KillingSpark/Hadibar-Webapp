@@ -21,7 +21,8 @@ Vue.component('login-form', {
     </div>
     `,
     methods:{
-        call_login: function(){
+        call_login: function(e){
+            e.preventDefault()
             that = this
             doLogin(this.name, this.password, function(res){
                 that.show_login = false
@@ -29,8 +30,10 @@ Vue.component('login-form', {
             function(msg){
                 alert(msg)
             })
+            return false
         },
-        call_logout: function(){
+        call_logout: function(e){
+            e.preventDefault()
             that = this
             doLogout(function(res){
                 that.show_login = true

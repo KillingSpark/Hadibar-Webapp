@@ -108,20 +108,23 @@ Vue.component('acc-info-table', {
     select_acc: function (idx) {
       this.account = this.accs[idx]
     },
-    make_payment: function () {
+    make_payment: function (e) {
+      e.preventDefault()
       diff = Number(this.difference)
       comp = this
       doTransaction("0", this.account.ID, diff, function(res){
         comp.account.Value += diff
       }, displayError)
     },
-    call_add: function() {
+    call_add: function(e) {
+      e.preventDefault()
       comp = this
       newAccount(0, this.newname, function(newacc){
         bevapp.accounts.push(newacc)
       }, displayError)
     },
-    call_delete: function() {
+    call_delete: function(e) {
+      e.preventDefault()
       comp = this
       deleteAccount(this.account.ID, function(){
         bevapp.updateAccounts()
@@ -133,7 +136,8 @@ Vue.component('acc-info-table', {
     select_source: function(idx){
       this.sourceacc = this.accs[idx]
     },
-    call_transaction: function(){
+    call_transaction: function(e){
+      e.preventDefault()
       isempty = function (obj) {
         for(var key in obj) {
             if(obj.hasOwnProperty(key))
@@ -151,6 +155,7 @@ Vue.component('acc-info-table', {
       doTransaction(this.sourceacc.ID, this.targetacc.ID, Number(this.transvalue), function(res){
         bevapp.updateAccounts()
       }, displayError)
+      return false
     }
   }
 })
