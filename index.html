@@ -24,6 +24,7 @@
     <script src="components/reports.js"></script>
     <script src="components/beverage_matrix.js"></script>
     <script src="components/login.js"></script>
+    <script src="components/user_view.js"></script>
     <title>HaDiBar</title>
 </head>
 
@@ -42,6 +43,7 @@
                     <a href="#" class="nav-item nav-link" v-on:click="openApp($event, 'accs')">AccountManager</a>
                     <a href="#" class="nav-item nav-link" v-on:click="openApp($event, 'reports')">Reports</a>
                     <a href="#" class="nav-item nav-link" v-on:click="openApp($event, 'bevmatrix')">Beverage Matrix</a>
+                    <a href="#" class="nav-item nav-link" v-on:click="openApp($event, 'user')">User info</a>
                 </div>
             </div>
             <div class="collapse navbar-collapse order-3" id="navbarSupportedContent">
@@ -56,6 +58,7 @@
             <bev-table v-show="show_bevs" v-bind:accs="accounts"></bev-table>
             <reports v-show="show_reports"></reports>
             <bevmatrix v-show="show_bevmatrix"></bevmatrix>
+            <user-update-form v-show="show_user"></user-update-form>
         </div>
     </div>
     <script src="app.js"></script>

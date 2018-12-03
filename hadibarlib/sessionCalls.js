@@ -7,6 +7,14 @@ function getSession(){
     callApi("/api/session/getid", 'GET', {}, function(id){sessionID = id}, function(){})
 }
 
+function getUser(success, failure){
+    callApi("/api/f/user/info", 'GET', {}, success, failure)
+}
+
+function setEmail(newemail, success, failure){
+    callApi("/api/f/user/email", 'POST', {email: newemail}, success, failure)
+}
+
 function doLogin(name, pw, success, failure){
     isSessionIDSet()
     succ = function(){
