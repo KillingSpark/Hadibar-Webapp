@@ -5,7 +5,9 @@ Vue.component('reports',
                 accReportHtml: "",
                 showaccreport: true,
                 txReportHtml: "",
-                showtxreport: false
+                showtxreport: false,
+                fromDate: "",
+                toDate: ""
             }
         },
         template: `
@@ -19,7 +21,11 @@ Vue.component('reports',
     </div>
     <br>
     <br>
-    <button class="btn" v-on:click=call_tx_report>Generate TransactionList</button>
+    <form>
+    <input v-model="fromDate" type="date" class="form-control form-text" placeholder="Earliest date DD.MM.YYYY" />
+    <input v-model="toDate" type="date" class="form-control form-text" placeholder="Lastest date DD.MM.YYYY" />
+    <button type=submit class="btn" v-on:click=call_tx_report>Generate TransactionList</button>
+    </form>
     <br>
     <br>
     <div class="row">
@@ -44,7 +50,7 @@ Vue.component('reports',
                 this.showtxreport = !this.showtxreport
                 if (this.showtxreport){
                     that = this
-                    transactionReport("", function (report) {
+                    transactionReport("", this.fromDate, this.toDate, function (report) {
                         that.txReportHtml = report
                     }, displayError)
                 }
