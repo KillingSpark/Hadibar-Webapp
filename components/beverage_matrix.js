@@ -3,16 +3,21 @@ Vue.component('bevmatrix', {
             return {
                 bevReportHtml: "",
             }
-        }  
+        }
     ,
     template: `
-    <div class="row">
-    <div class="col">
-    <button class="btn" v-on:click=call_beverage_report>Generate BeverageList</button>
-    <br>
-    <br>
-    <div v-html=bevReportHtml></div>
-    </div>
+    <div>
+        <div class="row d-print-none mb-md-3">
+            <div class="col">
+                <button class="btn btn-secondary d-print-none" v-on:click="call_beverage_report">Generate BeverageList</button>
+                <button class="btn btn-secondary" v-on:click="print">Print</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div v-html=bevReportHtml></div>
+            </div>
+        </div>
     </div>
     `,
     methods: {
@@ -22,5 +27,8 @@ Vue.component('bevmatrix', {
                 that.bevReportHtml = report
             }, displayError)
         },
+        print: function() {
+            window.print();
+        }
     }
 })

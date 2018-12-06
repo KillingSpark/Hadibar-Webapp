@@ -24,7 +24,7 @@ Vue.component('acc-select-info', {
     }
   },
   computed: {
-    isNegativ: function () {
+    isNegative: function () {
       return this.current_val < 0
     },
     current_val: function() {
@@ -43,9 +43,9 @@ Vue.component('acc-select-info', {
         </tr>
     </thead>
     <tbody>
-        <tr>
+        <tr v-bind:class='{"table-danger": isNegative, "table-success": !isNegative}'>
             <td><acc-select v-bind:selected_cb="acc_selected_cb" v-bind:accs="accs"></acc-select></td>
-            <td v-bind:class='{"bg-danger": isNegativ, "bg-success": !isNegativ}'>{{current_val}}</td>
+            <td>{{current_val}}</td>
         </tr>
     </tbody>
   </table>
@@ -68,41 +68,68 @@ Vue.component('acc-info-table', {
   <div>
     <div class="row">
       <div class="col-md-3">
-        <acc-select-info v-bind:selected_cb="select_acc" v-bind:accs="accs"></acc-select-info>
-        <button class="btn" v-on:click=call_delete>Delete Account</button>
-        <br>
-        <br>
-        <form>
-          <span>Change value of the account</span>
-          <input type="text" class="form-text" v-model="difference" placeholder="Difference to add"/>
-          <button type="submit" class="btn" v-on:click=make_payment>Execute</button>
-        </form>
+        <div class="row mb-md-3">
+          <div class="col">
+            <acc-select-info v-bind:selected_cb="select_acc" v-bind:accs="accs"></acc-select-info>
+          </div>
+        </div>
+
+        <div class="row mb-md-3">
+          <div class="col">
+              <form v-on:submit="call_delete">
+                <button type="submit" class="btn btn-danger">Delete Account</button>
+              </form>
+          </div>
+        </div>
+
+        <div class="row mb-md-3">
+          <div class="col">
+            <form v-on:submit="make_payment">
+              <div class="form-group">
+                <label for="difference">Change Account Value</label>
+                <input type="text" id="difference" class="form-control" v-model="difference" placeholder="Difference to add"/>
+                <small class="form-text text-muted">
+                  Changes the value of the account by adding the difference.
+                </small>
+              </div>
+              <button type="submit" class="btn btn-secondary">Execute</button>
+            </form>
+          </div>
+        </div>
       </div>
-    
+
       <div class="col-md-3">
-        <form class="">
-        <label for="new_acc">Add new account</label>
-        <input type="text" class="form-text" id="new_acc" v-model="newname" placeholder="Name for the new account"/>
-        <button type=submit class="btn" v-on:click=call_add>Add</button>
+        <form v-on:submit="call_add">
+          <div class="form-group">
+            <label for="new_acc">Add new account</label>
+            <input type="text" class="form-control" id="new_acc" v-model="newname" placeholder="Name for the new account"/>
+          </div>
+          <button type=submit class="btn btn-secondary">Add</button>
         </form>
       </div>
 
-      <div class="col-2"></div> 
+      <div class="col-2"></div>
 
       <div class="col-md-4">
         <h2>Do transaction</h2>
-        <form>
-          <label for="tx_amount">Amount to transfere</label>
-          <input type="text" v-model="transvalue" placeholder="Amount to transfere from left to right" id="tx_amount"/>
-          <label for="tx_source">Source account</label>
-          <acc-select v-bind:selected_cb="select_source" v-bind:accs="accs" id="tx_source"></acc-select>
-          <label for="tx_target">Target account</label>
-          <acc-select v-bind:selected_cb="select_target" v-bind:accs="accs" id="tx_target"></acc-select>
-          <button type=submit class="btn" v-on:click=call_transaction>Execute</button>
+        <form v-on:submit="call_transaction">
+          <div class="form-group">
+            <label for="tx_amount">Amount to transfer</label>
+            <input type="text" class="form-control" v-model="transvalue" placeholder="Amount to transfere from left to right" id="tx_amount"/>
+          </div>
+          <div class="form-group">
+            <label for="tx_source">Source account</label>
+            <acc-select v-bind:selected_cb="select_source" v-bind:accs="accs" id="tx_source"></acc-select>
+          </div>
+          <div class="form-group">
+            <label for="tx_target">Target account</label>
+            <acc-select v-bind:selected_cb="select_target" v-bind:accs="accs" id="tx_target"></acc-select>
+          </div>
+          <button type=submit class="btn btn-secondary">Execute</button>
         </form>
       </div>
     </div>
-  </div>  
+  </div>
   `,
   methods: {
     select_acc: function (idx) {
