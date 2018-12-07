@@ -119,15 +119,13 @@ Vue.component('acc-info-table', {
         <form v-on:submit="call_transaction">
           <div class="form-group">
             <label for="tx_amount">Amount to transfer</label>
-            <input type="text" class="form-control" v-model="transvalue" placeholder="Amount to transfere from left to right" id="tx_amount"/>
+            <input type="text" class="form-control-sm form-control" v-model="transvalue" placeholder="Amount to transfer" id="tx_amount"/>
           </div>
           <div class="form-group">
             <label for="tx_source">Source account</label>
-            <acc-select v-bind:selected_cb="select_source" v-bind:accs="accs" id="tx_source"></acc-select>
-          </div>
-          <div class="form-group">
+            <acc-select class="form-control-sm form-control" v-bind:selected_cb="select_source" v-bind:accs="accs" id="tx_source"></acc-select>
             <label for="tx_target">Target account</label>
-            <acc-select v-bind:selected_cb="select_target" v-bind:accs="accs" id="tx_target"></acc-select>
+            <acc-select class="form-control-sm form-control" v-bind:selected_cb="select_target" v-bind:accs="accs" id="tx_target"></acc-select>
           </div>
           <button type=submit class="btn btn-secondary">Execute</button>
         </form>
@@ -145,13 +143,15 @@ Vue.component('acc-info-table', {
       comp = this
       doTransaction("0", this.account.ID, diff, function(res){
         comp.account.Value += diff
+        comp.difference = ""
       }, displayError)
     },
     call_add: function(e) {
       e.preventDefault()
       comp = this
       newAccount(0, this.newname, function(newacc){
-        bevapp.accounts.push(newacc)
+        comp.accs.push(newacc)
+        comp.newname = ""
       }, displayError)
     },
     call_delete: function(e) {
@@ -178,13 +178,15 @@ Vue.component('acc-info-table', {
       }
       comp = this
       if (isempty(this.sourceacc )){
-        this.sourceacc = this.accs[0]
+        alert("no source account selected")
       }
       if (isempty(this.targetacc )){
-        this.targetacc = this.accs[0]
+        alert("no target account selected")
       }
+      comp = this
       doTransaction(this.sourceacc.ID, this.targetacc.ID, Number(this.transvalue), function(res){
         bevapp.updateAccounts()
+        comp.transvalue = 0
       }, displayError)
       return false
     }

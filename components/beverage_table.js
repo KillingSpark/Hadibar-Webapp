@@ -139,6 +139,9 @@ Vue.component('bev-table', {
         function (response) {
           response.times = 0
           comp.beverages.push(response)
+          comp.bev_name = ""
+          comp.bev_value = ""
+          comp.bev_avail = ""
         }, displayError)
         return false
     },

@@ -3,7 +3,7 @@ Vue.component('reports',
         data: function () {
             return {
                 accReportHtml: "",
-                showaccreport: true,
+                showaccreport: false,
                 txReportHtml: "",
                 showtxreport: false,
                 fromDate: "",
@@ -21,15 +21,19 @@ Vue.component('reports',
     </div>
     <br>
     <br>
-    <form>
+    <div class="row">
+    <div class="col-md-3">
+    <form class="">
         <div class="form-group">
-            <input v-model="fromDate" type="date" class="form-control" placeholder="Earliest date DD.MM.YYYY" />
-        </div>
-        <div class="form-group">
-            <input v-model="toDate" type="date" class="form-control" placeholder="Lastest date DD.MM.YYYY" />
+            <label for="tx_date_from">From date</label>
+            <input id="tx_date_from" v-model="fromDate" type="date" class="form-control" placeholder="Earliest date DD.MM.YYYY" />
+            <label for="tx_date_from">To date</label>
+            <input id="tx_date_to" v-model="toDate" type="date" class="form-control" placeholder="Lastest date DD.MM.YYYY" />
         </div>
         <button type=submit class="btn btn-secondary" v-on:click=call_tx_report>Generate TransactionList</button>
     </form>
+    </div>
+    </div>
     <br>
     <br>
     <div class="row">
