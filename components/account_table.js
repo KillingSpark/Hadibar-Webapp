@@ -1,21 +1,25 @@
-Vue.component('acc-option', {
-  props: ['name', 'idx', 'selected_cb'],
-  template: `<option v-on:click="selected_cb(idx)"> {{name}} </option>`,
-})
-
 Vue.component('acc-select', {
   props: ['accs', 'selected_cb'],
+  data: function(){return{
+    selected_idx: -1
+  }},
   template: `
-    <select class="custom-select" style="width: 100%">
-      <acc-option v-for="(acc, idx) in accs" v-bind:selected_cb="selected_cb" v-bind:key="idx" v-bind:idx="idx" v-bind:name="acc.Owner.Name" />
+    <select class="custom-select" style="width: 100%" v-model="selected_idx" v-on:change="on_change">
+      <option disabled value="-1">Select an account</option>
+      <option v-for="(acc, idx) in accs" v-bind:value="idx"> {{acc.Owner.Name}} </option>
     </select>
-    `
+    `,
+    methods: {
+      on_change: function(){
+        this.selected_cb(this.selected_idx)
+      }
+    }
 })
 
 Vue.component('acc-select-info', {
   props: ['accs', 'selected_cb'],
   data: function(){return {
-    idx: 0,
+    idx: -1,
   }},
   methods:{
     acc_selected_cb: function(idx) {
