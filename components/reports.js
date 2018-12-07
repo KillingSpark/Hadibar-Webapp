@@ -2,22 +2,31 @@ Vue.component('reports',
     {
         data: function () {
             return {
-                accReportHtml: "",
                 showaccreport: false,
-                txReportHtml: "",
+                txList: [],
                 showtxreport: false,
                 fromDate: "",
                 toDate: ""
             }
         },
+        props: ['accs'],
         template: `
     <div class="row">
     <div class="col">
-    <button class="btn btn-secondary" v-on:click=call_account_report>Generate AccountList</button>
+    <button class="btn btn-secondary" v-on:click=call_account_report>Toggle AccountList</button>
     <br>
     <br>
     <div class="row">
-    <div class="col-md-3" v-show="showaccreport" v-html=accReportHtml></div>
+    <div v-show="showaccreport">
+        <table class="table">
+            <th>Name</th><th>Value</th>
+            <tbody>
+                <tr v-bind:class='{"table-danger": acc.Value < 0, "table-success" : true}' v-for="acc in accs">
+                    <td>{{acc.Owner.Name}}</td><td>{{acc.Value}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     </div>
     <br>
     <br>
@@ -38,7 +47,16 @@ Vue.component('reports',
     <br>
     <div class="row">
     <div class="col-md-12">
-    <div v-show="showtxreport" v-html=txReportHtml></div>
+    <div v-show="showtxreport">
+        <table class="table">
+            <th>Time</th><th>Source</th><th>Target</th><th>Amount</th>
+            <tbody>
+                <tr v-for="tx in txList">
+                    <td>{{tx.Time}}</td><td>{{tx.Source}}</td><td>{{tx.Target}}</td><td>{{tx.Amount}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     </div>
     </div>
     </div>
@@ -47,19 +65,13 @@ Vue.component('reports',
         methods: {
             call_account_report: function () {
                 this.showaccreport = !this.showaccreport
-                if (this.showaccreport){
-                    that = this
-                    accountReport(function (report) {
-                        that.accReportHtml = report
-                    }, displayError)
-                }
             },
             call_tx_report: function () {
                 this.showtxreport = !this.showtxreport
                 if (this.showtxreport){
                     that = this
                     transactionReport("", this.fromDate, this.toDate, function (report) {
-                        that.txReportHtml = report
+                        that.txList = report
                     }, displayError)
                 }
             }

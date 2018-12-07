@@ -68,7 +68,7 @@
         <div class="content container-fluid">
             <acc-info-table v-bind:accs="accounts" v-show="show_accs"></acc-info-table>
             <bev-table v-show="show_bevs" v-bind:accs="accounts"></bev-table>
-            <reports v-show="show_reports"></reports>
+            <reports v-show="show_reports" v-bind:accs="accounts"></reports>
             <bevmatrix v-show="show_bevmatrix"></bevmatrix>
             <user-update-form v-show="show_user"></user-update-form>
         </div>
