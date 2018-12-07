@@ -1,19 +1,18 @@
-/// <reference path="../node_modules/@types/jquery/index.d.ts" />
-
 Vue.component('bev-table', {
   data: function () {
     return {
       beverages: [],
+      current_account: {},
       bev_value: "",
       bev_avail: "",
       bev_name: "",
     }
   },
-  computed:{
-    targetacc: function() {
+  computed: {
+    targetacc: function () {
       target = {}
-      this.accs.forEach( function(acc){
-        if (acc.Owner.Name == "bank"){
+      this.accs.forEach(function (acc) {
+        if (acc.Owner.Name == "bank") {
           target = acc
         }
       }
@@ -21,68 +20,109 @@ Vue.component('bev-table', {
       return target
     }
   },
-  props: ['current_account', 'accs'],
+  props: ['accs'],
   template:
     ` <div>
       <div class="row">
-      <div class="col-md-3">
-      </div>
-      </div>
-      <div class="row">
-        <table id="bev_table" class="table-bordered table-hover col-md-3">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Value</th>
-                    <th>Available</th>
-                    <th>Times</th>
-                    <th>Delete</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(bev, index) in beverages" v-bind:bev="bev">
-                    <td>{{bev.Name}}</td>
-                    <td class="center">{{bev.Value}}</td>
-                    <td class="center">{{bev.Available}}</td>
-                    <td><input v-model="beverages[index].times" type="text" style="width: 100%" /></td>
-                    <td class="danger center" v-on:click="call_delete(index)">X</td>
-                </tr>
-            </tbody>
+      <div class="col">
+      <h2>Payments</h2>
+      <acc-select-info v-bind:selected_cb="select_source" v-bind:account="current_account" v-bind:accs="accs"></acc-select-info>
+      <br>
+      <form v-on:submit="call_transaction">
+        <table id="bev_table" class="table">
+          <thead>
+              <tr>
+                  <th>Name</th>
+                  <th>Value</th>
+                  <th>Times</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr v-for="(bev, index) in beverages" v-bind:bev="bev">
+                <td>{{bev.Name}}</td>
+                <td class="center">{{bev.Value}}</td>
+                <td><input class="form-control" v-model="beverages[index].times" type="text" /></td>
+              </tr>
+          </tbody>
         </table>
-        <div class="col-md-6" id="makedrink">
-            <span id="makedrinktext">MAKE ALL THE DRINKS!</span>
-            <br>
-            <input type="text" v-model="bev_name" placeholder="name" />
-            <input type="text" v-model="bev_value" placeholder="value in cents" />
-            <input type="text" v-model="bev_avail" placeholder="how many" />
-            <br>
-            <button style="margin-top: 1%;" class="col-md-2" v-on:click="call_add">Add</button>
-          </div>
+        <button type="submit" class="btn btn-secondary">Execute</button>
+      </form>
       </div>
-      <div class="row">
-        <button v-on:click="call_transaction">Execute</button>
+
+      <div class="col-2"></div>
+
+      <div class="col">
+        <h2>Inventory</h2>
+        <table id="bev_table" class="table">
+          <thead>
+              <tr>
+                  <th>Name</th>
+                  <th>Value</th>
+                  <th>Available</th>
+                  <th>Delete</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr v-for="(bev, index) in beverages" v-bind:bev="bev">
+                <td>{{bev.Name}}</td>
+                <td class="center">{{bev.Value}}</td>
+                <td class="center">{{bev.Available}}</td>
+                <td class="danger">
+                <button class="btn bg-danger" style="text-align: center;" v-on:click="call_delete(index)">X</button>
+                </td>
+              </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col" id="makedrink">
+          <h2>New beverage</h2>
+          <form v-on:submit="call_add">
+            <div class="form-group">
+              <input type="text" class="form-control form-control-sm" v-model="bev_name" placeholder="name" />
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control form-control-sm" v-model="bev_value" placeholder="value in cents" />
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control form-control-sm" v-model="bev_avail" placeholder="how many" />
+            </div>
+            <button type="submit" class="btn btn-secondary">Add</button>
+          </form>
+      </div>
       </div>
     </div>
     `,
   methods: {
-    select_target: function(idx) {
-      this.targetacc = this.accs[idx]
+    select_source: function (idx) {
+      this.current_account = this.accs[idx]
     },
     sum_selected_beverages: function (event) {
       var sum = 0
       for (var i = 0; i < this.beverages.length; i++) {
-        sum += this.beverages[i].times * this.beverages[i].Value
-        updateBeverage(this.beverages[i].ID, this.beverages[i].Value, Number(this.beverages[i].Available)-Number(this.beverages[i].times), this.beverages[i].Name,
-          function(){}, displayError)
+        bev = this.beverages[i]
+        sum += bev.times * bev.Value
       }
-      this.updateBeverages()
-      return -sum
+      return sum
     },
-    call_transaction: function () {
+    updateAvailable: function () {
+      for (var i = 0; i < this.beverages.length; i++) {
+        bev = this.beverages[i]
+        comp = this
+        idx = i
+        updateBeverage(bev.ID, bev.Value, Number(bev.Available) - Number(bev.times), bev.Name,
+          function (resbev) { if(idx >= comp.beverages.length-1){comp.updateBeverages()}  }, displayError)
+      }
+    },
+    call_transaction: function (e) {
+      e.preventDefault()
       comp = this
-      doTransaction(this.current_account.ID, this.targetacc.ID, -this.sum_selected_beverages(), function (acc) {
-        bevapp.updateAccounts()
+      amount = this.sum_selected_beverages()
+      doTransaction(this.current_account.ID, this.targetacc.ID, amount, function () {
+        comp.current_account.Value -= amount
+        comp.updateAvailable()
       }, displayError)
+      return false
     },
     call_delete: function (index) {
       var comp = this
@@ -90,26 +130,38 @@ Vue.component('bev-table', {
         function (response) {
           comp.beverages.splice(index, 1)
         }, displayError)
+        return false
     },
-    call_add: function () {
+    call_add: function (e) {
+      e.preventDefault()
       var comp = this
       newBeverage(Number(this.bev_value), this.bev_name, Number(this.bev_avail),
         function (response) {
           response.times = 0
           comp.beverages.push(response)
+          comp.bev_name = ""
+          comp.bev_value = ""
+          comp.bev_avail = ""
         }, displayError)
+        return false
     },
     updateBeverages: function () {
       var comp = this
       getBeverages(function (response) {
-        comp.beverages = response
-        comp.beverages.forEach(function (element) {
-          element.times = 0
-        }, this);
+        if (response != null) {
+          comp.beverages = response
+          comp.beverages.forEach(function (element) {
+            element.times = 0
+          }, this);
+        }
       }, displayError)
     },
   },
   created: function () {
     loginHooks.push(this.updateBeverages)
+    comp = this
+    logoutHooks.push(function () {
+      comp.beverages = []
+    })
   }
 })

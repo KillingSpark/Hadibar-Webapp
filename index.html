@@ -2,11 +2,16 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
-    <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="app.css">
-    <script src="vue.js"></script>
-    <script src="jquery.js"></script>
+
+    <script src="vue-2.5.17.js"></script>
+    <script src="jquery-3.3.1.js"></script>
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
 
     <script SRC="hadibarlib/lib.js"></script>
     <script SRC="hadibarlib/accountCalls.js"></script>
@@ -17,24 +22,56 @@
     <script src="components/account_table.js"></script>
     <script src="components/beverage_table.js"></script>
     <script src="components/reports.js"></script>
+    <script src="components/beverage_matrix.js"></script>
     <script src="components/login.js"></script>
+    <script src="components/user_view.js"></script>
     <title>HaDiBar</title>
 </head>
 
 <body>
-    <div id="app" v-on:update-accounts="updateAccounts" class="container-fluid tabcontent">
-            <div class="tab row">
-                    <button class="col-md-6 tablink  active" v-on:click="openApp($event, 'bev-table')">Beverages</button>
-                    <button class="col-md-6 tablink" v-on:click="openApp($event, 'direct-payment')">AccountManager</button>
+    <div id="app">
+        <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-primary">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <a class="navbar-brand" href="#">HaDiBar</a>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" v-on:click="openApp($event, 'bevs')">Beverages</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" v-on:click="openApp($event, 'accs')">Accounts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" v-on:click="openApp($event, 'reports')">Reports</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" v-on:click="openApp($event, 'bevmatrix')">Beveragematrix</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" v-on:click="openApp($event, 'user')">User-info</a>
+                    </li>
+                </ul>
+
+                <div>
+                    <login-form></login-form>
                 </div>
-                <div class="content container-fluid">
-                    <acc-info-table v-bind:selected_cb=selectNewAcc v-bind:accs="accounts" v-bind:show_payment="show_payment" v-bind:account="current_account"></acc-info-table>
-                    <br>
-                    <br>
-                    <bev-table v-show="show_table" v-bind:accs="accounts" v-bind:current_account="current_account"></bev-table>
-                </div>
-                <login-form></login-form>
-          </div>
+            </div>
+        </nav>
+
+        <br>
+
+        <div class="content container-fluid">
+            <acc-info-table v-bind:accs="accounts" v-show="show_accs"></acc-info-table>
+            <bev-table v-show="show_bevs" v-bind:accs="accounts"></bev-table>
+            <reports v-show="show_reports" v-bind:accs="accounts"></reports>
+            <bevmatrix v-show="show_bevmatrix"></bevmatrix>
+            <user-update-form v-show="show_user"></user-update-form>
+        </div>
     </div>
     <script src="app.js"></script>
 </body>

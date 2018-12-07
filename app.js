@@ -1,28 +1,52 @@
-/// <reference path="node_modules/@types/jquery/index.d.ts" />
-
 var bevapp = new Vue({
   el: '#app',
   data: {
-    show_table: true,
-    show_payment: false,
+    show_bevs: true,
+    show_accs: false,
+    show_reports: false,
+    show_bevmatrix: false,
+    show_user: false,
     accounts: [],
-    current_account: {}
   },
   methods: {
-    selectNewAcc: function (index) { this.current_account = this.accounts[index]},
+    selectNewAcc: function (idx) { 
+      this.current_account = this.accounts[idx]
+    },
     openApp: function (event, app_name) {
-      var tabs = document.getElementsByClassName('tablink')
-      for (var i = 0; i < tabs.length; i++) {
-        tabs[i].classList.remove('active')
+      if (app_name === 'bevs') {
+        this.show_bevs = true
+        this.show_accs = false
+        this.show_reports = false
+        this.show_bevmatrix = false
+        this.show_user= false
       }
-      event.currentTarget.classList.add('active')
-      if (app_name === 'bev-table') {
-        this.show_table = true
-        this.show_payment = false
+      if (app_name === 'accs') {
+        this.show_bevs = false
+        this.show_accs = true
+        this.show_reports = false
+        this.show_bevmatrix = false
+        this.show_user= false
       }
-      if (app_name === 'direct-payment') {
-        this.show_table = false
-        this.show_payment = true
+      if (app_name === 'reports') {
+        this.show_bevs = false
+        this.show_accs = false
+        this.show_reports = true
+        this.show_bevmatrix = false
+        this.show_user= false
+      }
+      if (app_name === 'bevmatrix') {
+        this.show_bevs = false
+        this.show_accs = false
+        this.show_reports = false
+        this.show_bevmatrix = true
+        this.show_user= false
+      }
+      if (app_name === 'user') {
+        this.show_bevs = false
+        this.show_accs = false
+        this.show_reports = false
+        this.show_bevmatrix = false
+        this.show_user= true
       }
     },
     updateAccounts: function () {
@@ -36,6 +60,10 @@ var bevapp = new Vue({
 created: function () {
   getSessionIDAndThen(function(){})
   loginHooks.push(this.updateAccounts)
+  app = this
+  logoutHooks.push(function(){
+    app.accounts = []
+  })
 }
 })
 

@@ -1,84 +1,37 @@
-div.tab {
-    overflow: hidden;
-    border: 1px solid #ccc;
-    background-color: #f1f1f1;
-}
-
 #matrix {
+    border-width: 1px;
+    border-style: solid;
+    border-color: black;
     width: 100%;
 }
 
-#matrix td, th {
-    height: 40px;
+#matrix th {
+    border-width: 3px;
     border-style: solid;
-    border-color: #000000
+    border-color: black;
+}
+
+#matrix td {
+    border-width: 1px;
+    border-style: solid;
+    border-color: black;
 }
 
 #accreport {
-    width: 40%;
+    border-width: 1px;
+    border-style: solid;
+    border-color: black;
+    width: 100%;
 }
 
-.login_button{
-    border-radius: 10px;
-    background-color: inherit;
+#accreport th {
+    border-width: 3px;
+    border-style: solid;
+    border-color: black;
 }
 
-#makedrinktext {
-    font-size: 30px;
-}
-
-#makedrink {
-    margin-left: 10%;
-}
-
-div.tab button {
-    float: left;
-}
-td.center{
-    text-align: center;
-}
-th{
-    background-color: #ccc; 
-}
-.danger{
-    background-color: #ffbcbc;
-}
-.success{
-    background-color: #bcffbc;
-}
-input{
-    border: 1px solid #ccc;
-}
-body { 
-    padding-bottom: 70px;
-    background-color: white;
-}
-
-.content {
-    padding-top: 1%;
-    padding-left: 1%; 
-}
-
-.navbar {
-    background-color: #999;
-    padding-left: 1%;
-    padding-bottom: 0.5%;
-    padding-top: 0.5%; 
-}
-
-#logintext {
-    font-size: 20px;
-    margin-right: 2%;
-}
-
-button {
-    border: none;
-    outline: none;
-    cursor: pointer;
-    padding: 14px 16px;
-    border: 1px solid #ccc;
-    transition: 0.3s;
-}
-div.tab button.active {
-    background-color: #ccc;
+#accreport td {
+    border-width: 1px;
+    border-style: solid;
+    border-color: black;
 }

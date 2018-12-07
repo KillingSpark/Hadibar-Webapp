@@ -1,5 +1,3 @@
-/// <reference path="../node_modules/@types/jquery/index.d.ts" />
-
 Vue.component('login-form', {
     data: function () {
         return {
@@ -9,21 +7,24 @@ Vue.component('login-form', {
         }
     },
     template: `
-        <div class="navbar navbar-fixed-bottom">
-            <div v-if="show_login">
-                <span id="logintext">Log your ass in!</span>
-                <input type=text v-model="name" placeholder="Name"/>
-                <input type=password v-model="password" placeholder="Passwort"/>
-                <button class="login_button" v-on:click="call_login">LOGIN</button>
-            </div>
-            <div v-if="!show_login">
-                <span id="logintext">Log your ass out!</span>
-                <button class="login_button" v-on:click="call_logout">LOGOUT</button>
-            </div>
+    <div>
+        <div v-if="show_login">
+            <form class="form-inline" v-on:submit="call_login">
+                <input type="text" class="form-control form-control-sm mr-sm-1" v-model="name" placeholder="Name"/>
+                <input type="password" class="form-control form-control-sm mr-sm-1" v-model="password" placeholder="Passwort"/>
+                <button type="submit" class="btn btn-outline-light">LOGIN</button>
+            </form>
         </div>
+        <div v-if="!show_login">
+            <form class="form-inline" v-on:submit="call_logout">
+                <button type="submit" class="btn btn-outline-light">LOGOUT {{name}}</button>
+            </form>
+        </div>
+    </div>
     `,
     methods:{
-        call_login: function(){
+        call_login: function(e){
+            e.preventDefault()
             that = this
             doLogin(this.name, this.password, function(res){
                 that.show_login = false
@@ -31,8 +32,10 @@ Vue.component('login-form', {
             function(msg){
                 alert(msg)
             })
+            return false
         },
-        call_logout: function(){
+        call_logout: function(e){
+            e.preventDefault()
             that = this
             doLogout(function(res){
                 that.show_login = true

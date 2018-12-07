@@ -2,58 +2,78 @@ Vue.component('reports',
     {
         data: function () {
             return {
-                accReportHtml: "",
-                bevReportHtml: "",
-                txReportHtml: "",
+                showaccreport: false,
+                txList: [],
+                showtxreport: false,
+                fromDate: "",
+                toDate: ""
             }
         },
+        props: ['accs'],
         template: `
-    <div>
-    <button v-on:click=call_account_report>Generate AccountList</button>
+    <div class="row">
+    <div class="col">
+    <button class="btn btn-secondary" v-on:click=call_account_report>Toggle AccountList</button>
     <br>
     <br>
     <div class="row">
-    <div class="col-md-3" v-html=accReportHtml></div>
+    <div v-show="showaccreport">
+        <table class="table">
+            <th>Name</th><th>Value</th>
+            <tbody>
+                <tr v-bind:class='{"table-danger": acc.Value < 0, "table-success" : true}' v-for="acc in accs">
+                    <td>{{acc.Owner.Name}}</td><td>{{acc.Value}}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <br>
-    <br>
-    <button v-on:click=call_beverage_report>Generate BeverageList</button>
+    </div>
     <br>
     <br>
     <div class="row">
-    <div class="col-md-12"> 
-    <div v-html=bevReportHtml></div>
+    <div class="col-md-3">
+    <form class="">
+        <div class="form-group">
+            <label for="tx_date_from">From date</label>
+            <input id="tx_date_from" v-model="fromDate" type="date" class="form-control" placeholder="Earliest date DD.MM.YYYY" />
+            <label for="tx_date_from">To date</label>
+            <input id="tx_date_to" v-model="toDate" type="date" class="form-control" placeholder="Lastest date DD.MM.YYYY" />
+        </div>
+        <button type=submit class="btn btn-secondary" v-on:click=call_tx_report>Generate TransactionList</button>
+    </form>
     </div>
     </div>
-    <br>
-    <br>
-    <button v-on:click=call_tx_report>Generate TransactionList</button>
     <br>
     <br>
     <div class="row">
-    <div class="col-md-12"> 
-    <div v-html=txReportHtml></div>
+    <div class="col-md-12">
+    <div v-show="showtxreport">
+        <table class="table">
+            <th>Time</th><th>Source</th><th>Target</th><th>Amount</th>
+            <tbody>
+                <tr v-for="tx in txList">
+                    <td>{{tx.Time}}</td><td>{{tx.Source}}</td><td>{{tx.Target}}</td><td>{{tx.Amount}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+    </div>
     </div>
     </div>
     </div>`,
         methods: {
             call_account_report: function () {
-                that = this
-                accountReport(function (report) {
-                    that.accReportHtml = report
-                }, displayError)
-            },
-            call_beverage_report: function () {
-                that = this
-                beverageReport(function (report) {
-                    that.bevReportHtml = report
-                }, displayError)
+                this.showaccreport = !this.showaccreport
             },
             call_tx_report: function () {
-                that = this
-                transactionReport("", function (report) {
-                    that.txReportHtml = report
-                }, displayError)
+                this.showtxreport = !this.showtxreport
+                if (this.showtxreport){
+                    that = this
+                    transactionReport("", this.fromDate, this.toDate, function (report) {
+                        that.txList = report
+                    }, displayError)
+                }
             }
         }
     })
