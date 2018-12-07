@@ -8,13 +8,15 @@ Vue.component('user-update-form',
         },
         template: `
     <div class="row">
-    <div class="col">
-    <form>
-    <label for="newemail">Current email: {{currentemail}}</label>
-    <input type=email v-model="newemail" class="form-control form-text" placeholder="new email"/>
-    <button class="btn" v-on:click="call_set_email" type=submit>Submit</button>
-    </form>
-    </div>
+        <div class="col">
+            <form>
+                <div class="form-group">
+                    <label for="newemail">Current email: {{currentemail}}</label>
+                    <input type=email v-model="newemail" class="form-control" placeholder="new email"/>
+                </div>
+                <button class="btn btn-secondary" v-on:click="call_set_email" type=submit>Submit</button>
+            </form>
+        </div>
     </div>`,
         methods: {
             call_set_email: function () {

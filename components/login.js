@@ -9,14 +9,16 @@ Vue.component('login-form', {
     template: `
     <div>
         <div v-if="show_login">
-            <form class="form-inline">
-                <input type=text class="form-text form-control form-control-sm" v-model="name" placeholder="Name"/>
-                <input type=password class="form-text form-control form-control-sm" v-model="password" placeholder="Passwort"/>
-                <button type="submit" class="btn btn-primary" v-on:click="call_login">LOGIN</button>
+            <form class="form-inline" v-on:submit="call_login">
+                <input type="text" class="form-control form-control-sm mr-sm-1" v-model="name" placeholder="Name"/>
+                <input type="password" class="form-control form-control-sm mr-sm-1" v-model="password" placeholder="Passwort"/>
+                <button type="submit" class="btn btn-outline-light">LOGIN</button>
             </form>
         </div>
         <div v-if="!show_login">
-            <button type="submit" class="btn btn-primary" v-on:click="call_logout">LOGOUT {{name}}</button>
+            <form class="form-inline" v-on:submit="call_logout">
+                <button type="submit" class="btn btn-outline-light">LOGOUT {{name}}</button>
+            </form>
         </div>
     </div>
     `,

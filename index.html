@@ -30,24 +30,36 @@
 
 <body>
     <div id="app">
-        <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-primary">
+        <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-primary">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <a class="navbar-brand" href="#">HaDiBar</a>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <div class="navbar-nav">
-                    <a href="#" class="nav-item nav-link" v-on:click="openApp($event, 'bevs')">Beverages</a>
-                    <a href="#" class="nav-item nav-link" v-on:click="openApp($event, 'accs')">AccountManager</a>
-                    <a href="#" class="nav-item nav-link" v-on:click="openApp($event, 'reports')">Reports</a>
-                    <a href="#" class="nav-item nav-link" v-on:click="openApp($event, 'bevmatrix')">Beverage Matrix</a>
-                    <a href="#" class="nav-item nav-link" v-on:click="openApp($event, 'user')">User info</a>
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" v-on:click="openApp($event, 'bevs')">Beverages</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" v-on:click="openApp($event, 'accs')">AccountManager</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" v-on:click="openApp($event, 'reports')">Reports</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" v-on:click="openApp($event, 'bevmatrix')">Beverage Matrix</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" v-on:click="openApp($event, 'user')">User info</a>
+                    </li>
+                </ul>
+
+                <div>
+                    <login-form></login-form>
                 </div>
-            </div>
-            <div class="collapse navbar-collapse order-3" id="navbarSupportedContent">
-                <login-form></login-form>
             </div>
         </nav>
 

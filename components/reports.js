@@ -13,7 +13,7 @@ Vue.component('reports',
         template: `
     <div class="row">
     <div class="col">
-    <button class="btn" v-on:click=call_account_report>Generate AccountList</button>
+    <button class="btn btn-secondary" v-on:click=call_account_report>Generate AccountList</button>
     <br>
     <br>
     <div class="row">
@@ -22,14 +22,18 @@ Vue.component('reports',
     <br>
     <br>
     <form>
-    <input v-model="fromDate" type="date" class="form-control form-text" placeholder="Earliest date DD.MM.YYYY" />
-    <input v-model="toDate" type="date" class="form-control form-text" placeholder="Lastest date DD.MM.YYYY" />
-    <button type=submit class="btn" v-on:click=call_tx_report>Generate TransactionList</button>
+        <div class="form-group">
+            <input v-model="fromDate" type="date" class="form-control" placeholder="Earliest date DD.MM.YYYY" />
+        </div>
+        <div class="form-group">
+            <input v-model="toDate" type="date" class="form-control" placeholder="Lastest date DD.MM.YYYY" />
+        </div>
+        <button type=submit class="btn btn-secondary" v-on:click=call_tx_report>Generate TransactionList</button>
     </form>
     <br>
     <br>
     <div class="row">
-    <div class="col-md-12"> 
+    <div class="col-md-12">
     <div v-show="showtxreport" v-html=txReportHtml></div>
     </div>
     </div>
