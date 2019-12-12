@@ -17,6 +17,7 @@ function setEmail(newemail, success, failure){
 
 function doLogin(name, pw, success, failure){
     isSessionIDSet()
+    sessionStorage.setItem('sessionID', sessionID);
     succ = function(){
         loginHooks.forEach(function(hook){
             hook()
@@ -28,6 +29,7 @@ function doLogin(name, pw, success, failure){
 
 function doLogout(success, failure){
     isSessionIDSet()
+    sessionStorage.removeItem('sessionID');
     succ = function(){
         logoutHooks.forEach(function(hook){
             hook()

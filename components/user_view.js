@@ -22,17 +22,22 @@ Vue.component('user-update-form',
             call_set_email: function () {
                 if (this.newemail != this.currentemail) {
                     comp = this
-                    setEmail(this.newemail, function(){
+                    setEmail(this.newemail, function () {
                         comp.currentemail = comp.newemail
                     }, displayError)
                 }
                 return false
             }
         },
-        created: function() {
+        created: function () {
+            if (sessionStorage.getItem("sessionID")) {
+                getUser(function (resp) {
+                    comp.currentemail = resp.Email
+                }, displayError)
+            }
             comp = this
-            loginHooks.push(function(){
-                getUser(function(resp){
+            loginHooks.push(function () {
+                getUser(function (resp) {
                     comp.currentemail = resp.Email
                 }, displayError)
             })

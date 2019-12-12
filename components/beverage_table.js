@@ -174,6 +174,9 @@ Vue.component('bev-table', {
     },
   },
   created: function () {
+    if (sessionStorage.getItem("sessionID")) {
+      this.updateBeverages()
+    }
     loginHooks.push(this.updateBeverages)
     comp = this
     logoutHooks.push(function () {

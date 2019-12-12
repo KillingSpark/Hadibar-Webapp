@@ -22,31 +22,36 @@ Vue.component('login-form', {
         </div>
     </div>
     `,
-    methods:{
-        call_login: function(e){
+    methods: {
+        call_login: function (e) {
             e.preventDefault()
             that = this
-            doLogin(this.name, this.password, function(res){
+            doLogin(this.name, this.password, function (res) {
                 that.show_login = false
                 bevapp.openApp(undefined, 'bevs')
                 bevapp.loggedin = true
             },
-            function(msg){
-                alert(msg)
-            })
+                function (msg) {
+                    alert(msg)
+                })
             return false
         },
-        call_logout: function(e){
+        call_logout: function (e) {
             e.preventDefault()
             that = this
-            doLogout(function(res){
+            doLogout(function (res) {
                 that.show_login = true
                 bevapp.openApp(undefined, 'none')
                 bevapp.loggedin = false
             },
-            function(msg){
-                alert(msg)
-            })
+                function (msg) {
+                    alert(msg)
+                })
+        }
+    },
+    created: function () {
+        if (sessionStorage.getItem("sessionID")) {
+            this.show_login = false
         }
     }
 })

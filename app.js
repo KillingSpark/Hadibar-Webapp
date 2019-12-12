@@ -10,7 +10,7 @@ var bevapp = new Vue({
     accounts: [],
   },
   methods: {
-    selectNewAcc: function (idx) { 
+    selectNewAcc: function (idx) {
       this.current_account = this.accounts[idx]
     },
     openApp: function (event, app_name) {
@@ -19,42 +19,42 @@ var bevapp = new Vue({
         this.show_accs = false
         this.show_reports = false
         this.show_bevmatrix = false
-        this.show_user= false
+        this.show_user = false
       }
       if (app_name === 'accs') {
         this.show_bevs = false
         this.show_accs = true
         this.show_reports = false
         this.show_bevmatrix = false
-        this.show_user= false
+        this.show_user = false
       }
       if (app_name === 'reports') {
         this.show_bevs = false
         this.show_accs = false
         this.show_reports = true
         this.show_bevmatrix = false
-        this.show_user= false
+        this.show_user = false
       }
       if (app_name === 'bevmatrix') {
         this.show_bevs = false
         this.show_accs = false
         this.show_reports = false
         this.show_bevmatrix = true
-        this.show_user= false
+        this.show_user = false
       }
       if (app_name === 'user') {
         this.show_bevs = false
         this.show_accs = false
         this.show_reports = false
         this.show_bevmatrix = false
-        this.show_user= true
+        this.show_user = true
       }
       if (app_name === 'none') {
         this.show_bevs = false
         this.show_accs = false
         this.show_reports = false
         this.show_bevmatrix = false
-        this.show_user= false
+        this.show_user = false
       }
     },
     updateAccounts: function () {
@@ -65,14 +65,21 @@ var bevapp = new Vue({
       }, displayError)
     }
   },
-created: function () {
-  getSessionIDAndThen(function(){})
-  loginHooks.push(this.updateAccounts)
-  app = this
-  logoutHooks.push(function(){
-    app.accounts = []
-  })
-}
+  created: function () {
+    if (sessionStorage.getItem("sessionID")) {
+      sessionID = sessionStorage.getItem("sessionID");
+      this.updateAccounts()
+      this.openApp(undefined, 'bevs')
+      this.loggedin = true
+    } else {
+      getSessionIDAndThen(function () { })
+    }
+    loginHooks.push(this.updateAccounts)
+    app = this
+    logoutHooks.push(function () {
+      app.accounts = []
+    })
+  }
 })
 
 
