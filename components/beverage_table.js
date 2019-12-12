@@ -49,16 +49,16 @@ Vue.component('bev-table', {
       </form>
       </div>
 
-      <div class="col-2"></div>
 
       <div class="col">
         <h2>Inventory</h2>
-        <table id="bev_table" class="table">
+        <table id="bev_table" class="table center">
           <thead>
               <tr>
                   <th>Name</th>
                   <th>Value</th>
                   <th>Available</th>
+                  <th>Change available</th>
                   <th>Delete</th>
               </tr>
           </thead>
@@ -67,6 +67,11 @@ Vue.component('bev-table', {
                 <td>{{bev.Name}}</td>
                 <td class="center">{{bev.Value}}</td>
                 <td class="center">{{bev.Available}}</td>
+                <td class="center">
+                  <form v-on:submit="change_amount(index)" class="form-inline" action="#">
+                    <input type="number" class="form-control" v-model="beverages[index].inventory_difference"/>  
+                  </form>
+                </td>
                 <td class="danger">
                 <button class="btn bg-danger" style="text-align: center;" v-on:click="call_delete(index)">X</button>
                 </td>
@@ -74,6 +79,7 @@ Vue.component('bev-table', {
           </tbody>
         </table>
       </div>
+
 
       <div class="col" id="makedrink">
           <h2>New beverage</h2>
@@ -90,10 +96,20 @@ Vue.component('bev-table', {
             <button type="submit" class="btn btn-secondary">Add</button>
           </form>
       </div>
+
       </div>
     </div>
     `,
   methods: {
+    change_amount: function (idx) {
+      var difference = Number(this.beverages[idx].inventory_difference);
+      if (this.beverages[idx].inventory_difference == undefined) {
+        difference = 0;
+      }
+      this.beverages[idx].Available += difference
+      var bev = this.beverages[idx];
+      this.updateAvailable()
+    },
     select_source: function (idx) {
       this.current_account = this.accs[idx]
     },
