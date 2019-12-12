@@ -28,6 +28,8 @@ Vue.component('login-form', {
             that = this
             doLogin(this.name, this.password, function(res){
                 that.show_login = false
+                bevapp.openApp(undefined, 'bevs')
+                bevapp.loggedin = true
             },
             function(msg){
                 alert(msg)
@@ -39,6 +41,8 @@ Vue.component('login-form', {
             that = this
             doLogout(function(res){
                 that.show_login = true
+                bevapp.openApp(undefined, 'none')
+                bevapp.loggedin = false
             },
             function(msg){
                 alert(msg)

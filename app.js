@@ -1,11 +1,12 @@
 var bevapp = new Vue({
   el: '#app',
   data: {
-    show_bevs: true,
+    show_bevs: false,
     show_accs: false,
     show_reports: false,
     show_bevmatrix: false,
     show_user: false,
+    loggedin: false,
     accounts: [],
   },
   methods: {
@@ -47,6 +48,13 @@ var bevapp = new Vue({
         this.show_reports = false
         this.show_bevmatrix = false
         this.show_user= true
+      }
+      if (app_name === 'none') {
+        this.show_bevs = false
+        this.show_accs = false
+        this.show_reports = false
+        this.show_bevmatrix = false
+        this.show_user= false
       }
     },
     updateAccounts: function () {

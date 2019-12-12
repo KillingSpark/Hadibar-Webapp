@@ -39,7 +39,7 @@
             <a class="navbar-brand" href="#">HaDiBar</a>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
+                <ul class="navbar-nav mr-auto" v-if="loggedin">
                     <li class="nav-item">
                         <a href="#" class="nav-link" v-on:click="openApp($event, 'bevs')">Beverages</a>
                     </li>
